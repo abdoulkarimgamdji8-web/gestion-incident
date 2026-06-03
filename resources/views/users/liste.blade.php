@@ -1,0 +1,81 @@
+@extends('layouts.app')
+
+@section('content')
+
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                    <i class="mdi mdi-account-multiple"></i>
+                </span>
+                Gestion des utilisateurs
+            </h3>
+            <nav aria-label="breadcrumb">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span></span>
+                        Liste des utilisateurs
+                        <i class="mdi mdi-account-circle-outline icon-sm text-primary align-middle"></i>
+                    </li>
+                </ul>
+            </nav>
+            <div class="d-flex justify-content-end mt-3">
+                <a href="{{ route('users.create') }}" class="btn btn-gradient-primary btn-icon-text">
+                    <i class="mdi mdi-account-plus btn-icon-prepend"></i>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nom</th>
+                                        <th>Rôle</th>
+                                        <th>Statut</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse(isset($users) ? $users : [] as $user)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $user->nom }}</td>
+                                        <td>{{ $user->role->name ?? '-' }}</td>
+                                        <td>
+                                            <label class="badge badge-gradient-{{ isset($user->is_active) && $user->is_active ? 'success' : 'danger' }}">
+                                                {{ isset($user->is_active) && $user->is_active ? 'Actif' : 'Inactif' }}
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">Aucun utilisateur trouvé.</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+</div>
+
+@endsection
