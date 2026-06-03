@@ -1,12 +1,12 @@
 @extends('layouts.head')
 
-<div class="container-fluid page-body-wrapper full-page-wrapper">
+<div class="container-fluid page-body-wrapper full-page-wrapper login-background">
     <div class="content-wrapper d-flex align-items-center auth">
         <div class="row flex-grow">
             <div class="col-lg-4 mx-auto">
                 <div class="auth-form-light text-left p-5">
                     <div class="brand-logo text-center mb-4">
-                        <img src="{{ asset('dist/assets/images/logo.svg') }}" alt="Logo">
+                        <img src="{{ asset('dist/assets/images/logo.jpg') }}" alt="Logo" style="width: 180px; height: 80px; object-fit: contain;">
                     </div>
                     <h4 class="text-center mb-2">Bienvenue</h4>
                     <h6 class="font-weight-light text-center mb-4">Connectez-vous pour continuer.</h6>

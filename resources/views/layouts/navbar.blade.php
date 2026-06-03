@@ -41,6 +41,7 @@
 -->
     </div>
     <ul class="navbar-nav navbar-nav-right">
+      @auth
       <li class="nav-item nav-profile dropdown">
         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="nav-profile-img">
@@ -63,6 +64,11 @@
           </form>
         </div>
       </li>
+      @else
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('login') }}">Login</a>
+      </li>
+      @endauth
       <!--
       <li class="nav-item d-none d-lg-block full-screen-link">
         <a class="nav-link">
@@ -320,6 +326,7 @@
       </li>
       <!--end::Fullscreen Toggle-->
       <!--begin::User Menu Dropdown-->
+      <!--
       <li class="nav-item dropdown user-menu">
         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
           <img
@@ -329,37 +336,50 @@
           <span class="d-none d-md-inline">Alexander Pierce</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-          <!--begin::User Image-->
-          <li class="user-header text-bg-primary">
-            <img
-              src="{{ asset('dist/assets/images/user2-160x160.jpg') }}"
-              class="rounded-circle shadow"
-              alt="User Image" />
-            <p>
-              Alexander Pierce - Web Developer
-              <small>Member since Nov. 2023</small>
-            </p>
-          </li>
-          <!--end::User Image-->
-          <!--begin::Menu Body-->
-          <li class="user-body">
-            <!--begin::Row-->
-            <div class="row">
-              <div class="col-4 text-center"><a href="#">Followers</a></div>
-              <div class="col-4 text-center"><a href="#">Sales</a></div>
-              <div class="col-4 text-center"><a href="#">Friends</a></div>
-            </div>
-            <!--end::Row-->
-          </li>
-          <!--end::Menu Body-->
-          <!--begin::Menu Footer-->
+-->
+      <!--begin::User Image-->
+      <!--
+      <li class="user-header text-bg-primary">
+        <img
+          src="{{ asset('dist/assets/images/user2-160x160.jpg') }}"
+          class="rounded-circle shadow"
+          alt="User Image" />
+        <p>
+          Alexander Pierce - Web Developer
+          <small>Member since Nov. 2023</small>
+        </p>
+      </li>
+-->
+      <!--end::User Image-->
+      <!--begin::Menu Body-->
+      <!--
+      <li class="user-body">
+-->
+      <!--begin::Row-->
+      <!--
+        <div class="row">
+          <div class="col-4 text-center"><a href="#">Followers</a></div>
+          <div class="col-4 text-center"><a href="#">Sales</a></div>
+          <div class="col-4 text-center"><a href="#">Friends</a></div>
+        </div>
+-->
+      <!--end::Row-->
+      <!--
+      </li>
+-->
+      <!--end::Menu Body-->
+      <!--begin::Menu Footer-->
+      <!--
           <li class="user-footer">
             <a href="#" class="btn btn-default btn-flat">Profile</a>
             <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
           </li>
-          <!--end::Menu Footer-->
-        </ul>
-      </li>
+-->
+      <!--end::Menu Footer-->
+      <!--
+    </ul>
+    </li>
+-->
       <!--end::User Menu Dropdown-->
     </ul>
     <!--end::End Navbar Links-->

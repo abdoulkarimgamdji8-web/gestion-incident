@@ -14,32 +14,27 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'nom', 
-        'prenom', 
-        'email', 
-        'password', 
-        'numero', 
-        'date', 
-        'statut', 
-        'role_id', 
-        'domaine', 
-        'disponibilite'
+        'nom',
+        'prenom',
+        'email',
+        'password',
+        'numero',
+        'date',
+        'statut',
+        'role_id',
+        'domaine_id',
+        'disponibilite',
     ];
 
     protected $hidden = [
-        'password', 
-        'remember_token'
+        'password',
+        'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
-    // === Relations ===
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
@@ -52,7 +47,7 @@ class User extends Authenticatable
 
     public function interventions(): HasMany
     {
-        return $this->hasMany(Intervention::class, 'technicien_id'); // Correction nom (majuscule)
+        return $this->hasMany(Intervention::class, 'technicien_id');
     }
 
     public function notifications(): HasMany
@@ -65,7 +60,6 @@ class User extends Authenticatable
         return $this->hasMany(Historique::class);
     }
 
-    // Accesseur nom complet
     public function getNameAttribute(): string
     {
         return trim(($this->nom ?? '') . ' ' . ($this->prenom ?? ''));

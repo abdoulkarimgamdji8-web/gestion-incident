@@ -9,7 +9,7 @@
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
                     <span class="font-weight-bold mb-2">{{ Auth::user()->nom }}</span>
-                        <span class="text-secondary text-small">{{ Auth::user()->role->nom_role }}</span>
+                    <span class="text-secondary text-small">{{ Auth::user()->role->nom_role }}</span>
                 </div>
                 <i
                     class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
@@ -27,6 +27,7 @@
                 <i class="mdi mdi-account-multiple menu-icon"></i>
             </a>
         </li>
+        <!--
         <li class="nav-item">
             <a
                 class="nav-link"
@@ -69,7 +70,7 @@
                 aria-controls="icons">
                 <span class="menu-title">Icons</span>
                 <i class="mdi mdi-contacts menu-icon"></i>
-            </a>
+                    <i class="mdi mdi-settings menu-icon"></i>
             <div class="collapse" id="icons">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
@@ -140,6 +141,7 @@
                 </ul>
             </div>
         </li>
+-->
         <li class="nav-item">
             <a
                 class="nav-link"
@@ -147,40 +149,44 @@
                 href="#auth"
                 aria-expanded="false"
                 aria-controls="auth">
-                <span class="menu-title">User Pages</span>
+                <span class="menu-title">Paramètres</span>
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-lock menu-icon"></i>
+                <i class="mdi mdi-settings menu-icon"></i>
             </a>
             <div class="collapse" id="auth">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/samples/blank-page.html">
-                            Blank Page
+                        <a class="nav-link" href="{{ route('roles.index') }}">
+                            Gestion des rôles
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/samples/login.html">
-                            Login
+                        <a class="nav-link" href="{{ route('domaines.index') }}">
+                            Gestion des domaines
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/samples/register.html">
-                            Register
+                        <a class="nav-link" href="{{ route('stations.index') }}">
+                            Gestion des stations
                         </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/samples/error-404.html">
-                            404
+                        <a class="nav-link" href="{{ route('equipements.index') }}">
+                            Gestion des équipements
                         </a>
                     </li>
+                    <!--
                     <li class="nav-item">
                         <a class="nav-link" href="pages/samples/error-500.html">
                             500
                         </a>
                     </li>
+-->
                 </ul>
             </div>
         </li>
+        <!--
         <li class="nav-item">
             <a
                 class="nav-link"
@@ -190,5 +196,6 @@
                 <i class="mdi mdi-file-document-box menu-icon"></i>
             </a>
         </li>
+-->
     </ul>
 </nav>

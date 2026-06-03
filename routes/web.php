@@ -17,6 +17,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::resource('users', App\Http\Controllers\UserController::class);
 Route::resource('dashboard', App\Http\Controllers\DashboardController::class);
+Route::resource('roles', App\Http\Controllers\RoleController::class);
+Route::resource('domaines', App\Http\Controllers\DomaineController::class);
+Route::resource('stations', App\Http\Controllers\StationController::class);
+Route::resource('equipements', App\Http\Controllers\EquipementController::class);
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('users', App\Http\Controllers\UserController::class);
