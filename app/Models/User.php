@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'nom',
@@ -24,6 +24,7 @@ class User extends Authenticatable
         'role_id',
         'domaine_id',
         'disponibilite',
+        'remember_token',
     ];
 
     protected $hidden = [
@@ -33,35 +34,32 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'date' => 'date',
     ];
 
-    public function role(): BelongsTo
+    public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
-    public function assignedIncidents(): HasMany
+    public function incidents()
     {
         return $this->hasMany(Incident::class, 'technicien_assigne_id');
     }
 
-    public function interventions(): HasMany
+    public function interventions()
     {
         return $this->hasMany(Intervention::class, 'technicien_id');
     }
 
-    public function notifications(): HasMany
+    public function notifications()
     {
         return $this->hasMany(Notification::class);
     }
 
-    public function historiques(): HasMany
+    public function historiques()
     {
         return $this->hasMany(Historique::class);
-    }
-
-    public function getNameAttribute(): string
-    {
-        return trim(($this->nom ?? '') . ' ' . ($this->prenom ?? ''));
     }
 }

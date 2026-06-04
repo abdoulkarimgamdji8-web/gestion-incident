@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    //
     public function index()
     {
-        //
+        $roles = Role::orderBy('nom_role')->get();
+        return view('roles.liste', compact('roles'));
     }
 
     /**
@@ -20,6 +20,7 @@ class RoleController extends Controller
     public function create()
     {
         //
+        return view('roles.ajouter');
     }
 
     /**
@@ -28,6 +29,15 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request->validate([
+            'nom_role' => 'required|string|max:255|unique:roles,nom_role',
+        ]);
+
+        $role = new Role();
+        $role->nom_role = $validated['nom_role'];
+        $role->save();
+
+        return redirect()->route('roles.index')->with('success', 'Rôle ajouté avec succès.');
     }
 
     /**
@@ -44,6 +54,8 @@ class RoleController extends Controller
     public function edit(string $id)
     {
         //
+        $role = Role::findOrFail($id);
+        return view('roles.modifier', compact('role'));
     }
 
     /**
@@ -52,6 +64,15 @@ class RoleController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $role = Role::findOrFail($id);
+        $validated = $request->validate([
+            'nom_role' => 'required|string|max:255|unique:roles,nom_role,' . $role->id,
+        ]);
+
+        $role->nom_role = $validated['nom_role'];
+        $role->save();
+
+        return redirect()->route('roles.index')->with('success', 'Rôle mis à jour avec succès.');
     }
 
     /**
@@ -60,5 +81,8 @@ class RoleController extends Controller
     public function destroy(string $id)
     {
         //
+        $role = Role::findOrFail($id);
+        $role->delete();
+        return redirect()->route('roles.index')->with('success', 'Rôle supprimé avec succès.');
     }
 }
