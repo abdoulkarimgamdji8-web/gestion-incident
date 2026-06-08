@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class station extends Model
 {
+    protected $fillable = [
+        'nom',
+        'ville',
+        'zone',
+        'statut',
+    ];
+
     public function equipements(): HasMany
     {
         return $this->hasMany(Equipement::class);

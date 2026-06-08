@@ -1,9 +1,18 @@
+<?php
+
+use Illuminate\Support\Facades\Auth;
+
+$user = Auth::user();
+$role = $user->role->nom_role;
+
+?>
+
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                    <img src="{{ asset('dist/assets/images/faces/face1.jpg') }}" alt="profile" />
+                    <img src="{{ asset('dist/assets/images/account.jpg') }}" alt="profile" />
                     <span class="login-status online"></span>
                     <!--change to offline or busy as needed-->
                 </div>
@@ -21,13 +30,70 @@
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
         </li>
+        @if ($role == 'Admin')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">
                 <span class="menu-title">Gestion des utilisateurs</span>
                 <i class="mdi mdi-account-multiple menu-icon"></i>
             </a>
         </li>
+        @endif
+
+        @if ($role == 'Directeur Technique' || $role == 'Responsable DT')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('incidents.index') }}">
+                <span class="menu-title">Gestion des incidents</span>
+                <i class="mdi mdi-alert-circle menu-icon"></i>
+            </a>
+        </li>
+        @endif
+
+        @if ($role == 'Agent Station')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('incidents.mes_incidents') }}">
+                <span class="menu-title">Mes incidents</span>
+                <i class="mdi mdi-alert-circle menu-icon"></i>
+            </a>
+        </li>
+        @endif
+
+        @if ($role == 'Technicien' || $role == 'Prestataire Externe')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('interventions.index') }}">
+                <span class="menu-title">Mes interventions</span>
+                <i class="mdi mdi-alert-circle menu-icon"></i>
+            </a>
+        </li>
+        @endif
         <!--
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                data-bs-toggle="collapse"
+                href="#incident-info"
+                aria-expanded="false"
+                aria-controls="incident-info">
+                <span class="menu-title">À propos des incidents</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-information menu-icon"></i>
+            </a>
+            <div class="collapse" id="incident-info">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <div class="text-muted small p-2">
+                            <strong>Incident Technique :</strong><br>
+                            Un problème signalé sur un équipement nécessitant intervention.<br><br>
+                            <strong>Paramètres :</strong><br>
+                            • Domaines : catégories métier<br>
+                            • Stations : lieux d'installation<br>
+                            • Équipements : ressources affectées<br>
+                            • Rôles : permissions utilisateur
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        
         <li class="nav-item">
             <a
                 class="nav-link"
@@ -142,6 +208,7 @@
             </div>
         </li>
 -->
+        @if ($role == 'Admin')
         <li class="nav-item">
             <a
                 class="nav-link"
@@ -176,7 +243,14 @@
                             Gestion des équipements
                         </a>
                     </li>
+
                     <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('incidents.index') }}">
+                            Gestion des incidents
+                        </a>
+                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="pages/samples/error-500.html">
                             500
@@ -186,6 +260,7 @@
                 </ul>
             </div>
         </li>
+        @endif
         <!--
         <li class="nav-item">
             <a

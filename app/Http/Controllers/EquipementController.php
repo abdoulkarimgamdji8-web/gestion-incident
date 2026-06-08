@@ -12,14 +12,14 @@ class EquipementController extends Controller
     {
         $equipements = Equipement::with('station')->orderBy('nom')->get();
 
-        return view('equipements.liste', compact('equipements'));
+        return view('layouts.equipements.liste', compact('equipements'));
     }
 
     public function create()
     {
         $stations = Station::orderBy('nom')->get();
 
-        return view('equipements.ajouter', compact('stations'));
+        return view('layouts.equipements.ajouter', compact('stations'));
     }
 
     public function store(Request $request)
@@ -28,7 +28,7 @@ class EquipementController extends Controller
             'nom' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'etat' => 'required|in:fonctionnel,en_panne,critique',
-            'station_id' => 'required|exists:station,id',
+            'station_id' => 'required|exists:stations,id',
         ]);
 
         Equipement::create($validated);
@@ -41,7 +41,7 @@ class EquipementController extends Controller
         $equipement = Equipement::findOrFail($id);
         $stations = Station::orderBy('nom')->get();
 
-        return view('equipements.modifier', compact('equipement', 'stations'));
+        return view('layouts.equipements.modifier', compact('equipement', 'stations'));
     }
 
     public function update(Request $request, string $id)
@@ -52,7 +52,7 @@ class EquipementController extends Controller
             'nom' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'etat' => 'required|in:fonctionnel,en_panne,critique',
-            'station_id' => 'required|exists:station,id',
+            'station_id' => 'required|exists:stations,id',
         ]);
 
         $equipement->update($validated);

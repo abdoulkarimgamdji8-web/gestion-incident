@@ -13,7 +13,7 @@ class StationController extends Controller
     public function index()
     {
         $stations = Station::orderBy('nom')->get();
-        return view('stations.liste', compact('stations'));
+        return view('layouts.stations.liste', compact('stations'));
     }
 
     /**
@@ -21,7 +21,7 @@ class StationController extends Controller
      */
     public function create()
     {
-        return view('stations.ajouter');
+        return view('layouts.stations.ajouter');
     }
 
     /**
@@ -40,7 +40,7 @@ class StationController extends Controller
             'nom' => $validated['nom'],
             'ville' => $validated['ville'],
             'zone' => $validated['zone'],
-            'statut' => $request->has('statut'),
+            'statut' => $request->has('statut') ? 'active' : 'inactive',
         ]);
 
         return redirect()->route('stations.index')->with('success', 'Station ajoutée avec succès.');
@@ -60,7 +60,7 @@ class StationController extends Controller
     public function edit(string $id)
     {
         $station = Station::findOrFail($id);
-        return view('stations.modifier', compact('station'));
+        return view('layouts.stations.modifier', compact('station'));
     }
 
     /**
@@ -81,7 +81,7 @@ class StationController extends Controller
             'nom' => $validated['nom'],
             'ville' => $validated['ville'],
             'zone' => $validated['zone'],
-            'statut' => $request->has('statut'),
+            'statut' => $request->has('statut') ? 'active' : 'inactive',
         ]);
 
         return redirect()->route('stations.index')->with('success', 'Station mise à jour avec succès.');

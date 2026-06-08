@@ -13,7 +13,7 @@ class DomaineController extends Controller
     public function index()
     {
         $domaines = Domaine::orderBy('nom_domaine')->get();
-        return view('domaines.liste', compact('domaines'));
+        return view('layouts.domaines.liste', compact('domaines'));
     }
 
     /**
@@ -21,7 +21,7 @@ class DomaineController extends Controller
      */
     public function create()
     {
-        return view('domaines.ajouter');
+        return view('layouts.domaines.ajouter');
     }
 
     /**
@@ -54,7 +54,7 @@ class DomaineController extends Controller
     public function edit(string $id)
     {
         $domaine = Domaine::findOrFail($id);
-        return view('domaines.modifier', compact('domaine'));
+        return view('layouts.domaines.modifier', compact('domaine'));
     }
 
     /**

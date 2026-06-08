@@ -43,6 +43,7 @@ class UserController extends Controller
             'password' => 'required|string|min:8|max:8',
             'role_id' => 'required|exists:roles,id',
             'domaine_id' => 'nullable|exists:domaines,id',
+            'disponibilite' => 'nullable|boolean',
         ]);
 
         $user = new User();
@@ -60,8 +61,9 @@ class UserController extends Controller
         }
 
         $selectedRole = Role::find($validated['role_id']);
-        if ($selectedRole && (str_contains(strtolower($selectedRole->nom_role), 'Technicien') || str_contains(strtolower($selectedRole->nom_role), 'Prestataire Externe'))) {
-            $user->disponibilite = true;
+        $isTechnicianOrProvider = $selectedRole && (str_contains(strtolower($selectedRole->nom_role), 'technicien') || str_contains(strtolower($selectedRole->nom_role), 'prestataire'));
+        if ($isTechnicianOrProvider) {
+            $user->disponibilite = $request->filled('disponibilite') ? $request->boolean('disponibilite') : true;
         } else {
             $user->disponibilite = null;
         }
@@ -77,7 +79,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         //
-        $user = User::findOrFail($id);
+        $user = User::with(['role', 'domaine'])->findOrFail($id);
         return view('users.voir', compact('user'));
     }
 
@@ -108,6 +110,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8|max:8',
             'role_id' => 'required|exists:roles,id',
             'domaine_id' => 'nullable|exists:domaines,id',
+            'disponibilite' => 'nullable|boolean',
         ]);
 
         $user->nom = $validated['nom'];
@@ -127,10 +130,9 @@ class UserController extends Controller
         }
 
         $selectedRole = Role::find($validated['role_id']);
-        if ($selectedRole && (str_contains(strtolower($selectedRole->nom_role), 'technicien') || str_contains(strtolower($selectedRole->nom_role), 'prestataire'))) {
-            if ($user->disponibilite === null) {
-                $user->disponibilite = true;
-            }
+        $isTechnicianOrProvider = $selectedRole && (str_contains(strtolower($selectedRole->nom_role), 'technicien') || str_contains(strtolower($selectedRole->nom_role), 'prestataire'));
+        if ($isTechnicianOrProvider) {
+            $user->disponibilite = $request->filled('disponibilite') ? $request->boolean('disponibilite') : ($user->disponibilite === null ? true : $user->disponibilite);
         } else {
             $user->disponibilite = null;
         }

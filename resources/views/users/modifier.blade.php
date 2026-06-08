@@ -9,8 +9,9 @@
         <div class="brand-logo text-center mb-4">
           <img src="{{ asset('dist/assets/images/logo.svg') }}" alt="logo">
         </div>
-        <h3 class="text-center mb-2">Ajouter un utilisateur</h3>
-        <p class="text-center text-muted mb-4">Complétez les informations ci-dessous.</p>
+        <h3 class="text-center mb-2">Modifier un utilisateur</h3>
+        <p class="text-center text-muted mb-4">Mettez à jour les informations de l'utilisateur.</p>
+
         @if ($errors->any())
         <div class="alert alert-danger">
           <ul>
@@ -20,19 +21,22 @@
           </ul>
         </div>
         @endif
-        <form class="pt-3" method="POST" action="{{ route('users.store') }}">
+
+        <form class="pt-3" method="POST" action="{{ route('users.update', $user->id) }}">
           @csrf
+          @method('PUT')
+
           <div class="row g-3">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="last_name" class="form-label">Nom</label>
-                <input type="text" name="nom" class="form-control form-control-sm" id="last_name" placeholder="Nom" required>
+                <input type="text" name="nom" class="form-control form-control-sm" id="last_name" placeholder="Nom" value="{{ old('nom', $user->nom) }}" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="first_name" class="form-label">Prénom</label>
-                <input type="text" name="prenom" class="form-control form-control-sm" id="first_name" placeholder="Prénom" required>
+                <input type="text" name="prenom" class="form-control form-control-sm" id="first_name" placeholder="Prénom" value="{{ old('prenom', $user->prenom) }}" required>
               </div>
             </div>
             <div class="col-md-6">
@@ -41,7 +45,7 @@
                 <select class="form-select form-select-sm" name="role_id" id="role" required>
                   <option value="">Sélectionnez un rôle</option>
                   @foreach($roles as $role)
-                  <option value="{{ $role->id }}" data-name="{{ strtolower($role->nom_role) }}">{{ $role->nom_role }}</option>
+                  <option value="{{ $role->id }}" data-name="{{ strtolower($role->nom_role) }}" {{ old('role_id', $user->role_id) == $role->id ? 'selected' : '' }}>{{ $role->nom_role }}</option>
                   @endforeach
                 </select>
               </div>
@@ -49,19 +53,19 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="email" class="form-label">Mail</label>
-                <input type="email" name="email" class="form-control form-control-sm" id="email" placeholder="email@exemple.com" required>
+                <input type="email" name="email" class="form-control form-control-sm" id="email" placeholder="email@exemple.com" value="{{ old('email', $user->email) }}" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="password" class="form-label">Mot de passe</label>
-                <input type="password" name="password" class="form-control form-control-sm" id="password" placeholder="Mot de passe" required maxlength="8">
+                <input type="password" name="password" class="form-control form-control-sm" id="password" placeholder="Laisser vide pour conserver le mot de passe actuel" maxlength="8">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="phone" class="form-label">Numéro de téléphone</label>
-                <input type="tel" name="numero" class="form-control form-control-sm" id="phone" placeholder="06 12 34 56 78" required title="Veuillez entrer un numéro de téléphone valide à 9 chiffres" maxlength="9">
+                <input type="tel" name="numero" class="form-control form-control-sm" id="phone" placeholder="06 12 34 56 78" value="{{ old('numero', $user->numero) }}" required title="Veuillez entrer un numéro de téléphone valide à 9 chiffres" maxlength="9">
               </div>
             </div>
             <div class="col-md-6" id="domaineField" style="display:none;">
@@ -70,7 +74,7 @@
                 <select class="form-select form-select-sm" name="domaine_id" id="domaine_id">
                   <option value="">Sélectionnez un domaine</option>
                   @foreach($domaines as $domaine)
-                  <option value="{{ $domaine->id }}">{{ $domaine->nom_domaine }}</option>
+                  <option value="{{ $domaine->id }}" {{ old('domaine_id', $user->domaine_id) == $domaine->id ? 'selected' : '' }}>{{ $domaine->nom_domaine }}</option>
                   @endforeach
                 </select>
               </div>
@@ -80,14 +84,15 @@
                 <label for="disponibilite" class="form-label">Disponibilité</label>
                 <select class="form-select form-select-sm" name="disponibilite" id="disponibilite">
                   <option value="">Non défini</option>
-                  <option value="1">Disponible</option>
-                  <option value="0">Occupé</option>
+                  <option value="1" {{ old('disponibilite', $user->disponibilite) == 1 ? 'selected' : '' }}>Disponible</option>
+                  <option value="0" {{ old('disponibilite', $user->disponibilite) === 0 ? 'selected' : '' }}>Occupé</option>
                 </select>
               </div>
             </div>
           </div>
+
           <div class="mt-4 d-flex gap-2">
-            <button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Ajouter</button>
+            <button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Enregistrer</button>
             <a href="{{ route('users.index') }}" class="btn btn-secondary btn-lg font-weight-medium auth-form-btn flex-grow-1">Retour</a>
           </div>
         </form>
@@ -95,6 +100,7 @@
     </div>
   </div>
 </div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const roleField = document.getElementById('role');

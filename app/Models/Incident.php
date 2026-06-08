@@ -3,33 +3,66 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Incident extends Model
 {
-    public function station(): BelongsTo
+    // Utiliser le nom de table pluriel standard
+    protected $table = 'incidents';
+
+    protected $fillable = [
+        'titre',
+        'description',
+        'statut',
+        'priorite',
+        'date_signalement',
+        'domaine_id',
+        'technicien_assigne_id',
+        'declarant_id',
+        'station_id',
+        'equipement_id',
+    ];
+
+    protected $casts = [
+        'date_signalement' => 'datetime',
+    ];
+
+    public function domaine()
     {
-        return $this->belongsTo(station::class);
+        return $this->belongsTo(Domaine::class, 'domaine_id');
     }
 
-    public function equipement(): BelongsTo
-    {
-        return $this->belongsTo(Equipement::class);
-    }
-
-    public function user(): BelongsTo
+    public function technicien()
     {
         return $this->belongsTo(User::class, 'technicien_assigne_id');
     }
 
-    public function interventions(): HasMany
+    public function declarant()
     {
-        return $this->hasMany(intervention::class);
+        return $this->belongsTo(User::class, 'declarant_id');
     }
 
-    public function pieceJointes(): HasMany
+    public function station()
     {
-        return $this->hasMany(piece_jointes::class);
+        return $this->belongsTo(Station::class, 'station_id');
+    }
+
+    public function equipement()
+    {
+        return $this->belongsTo(Equipement::class, 'equipement_id');
+    }
+
+    public function interventions()
+    {
+        return $this->hasMany(Intervention::class);
+    }
+
+    public function rapports()
+    {
+        return $this->hasManyThrough(Rapport::class, Intervention::class);
+    }
+
+    public function piecesJointes()
+    {
+        return $this->hasMany(Pieces::class);
     }
 }

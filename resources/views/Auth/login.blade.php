@@ -34,7 +34,7 @@
                         <div class="my-2 d-flex justify-content-between align-items-center">
                             <div class="form-check">
                                 <label class="form-check-label text-muted">
-                                    <input type="checkbox" class="form-check-input" name="remember"> Rester connecté
+                                    <input type="checkbox" class="form-check-input" name="remember">
                                 </label>
                             </div>
                             <a href="#" class="auth-link text-primary">Mot de passe oublié ?</a>

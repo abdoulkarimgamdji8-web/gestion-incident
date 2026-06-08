@@ -21,12 +21,22 @@ class authController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            // Vérifier si l'utilisateur est actif
+            if ($user->statut === 0) {
+                Auth::logout();
+                return back()->withErrors([
+                    'danger' => 'Votre compte est inactif. Veuillez s\'il vous plaît contacter l\'administrateur.',
+                ]);
+            }
+
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'danger' => 'Les identifiants fournis ne correspondent pas à nos enregistrements.',
         ]);
     }
 

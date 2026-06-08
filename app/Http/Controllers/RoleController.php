@@ -11,7 +11,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::orderBy('nom_role')->get();
-        return view('roles.liste', compact('roles'));
+        return view('layouts.roles.liste', compact('roles'));
     }
 
     /**
@@ -20,7 +20,7 @@ class RoleController extends Controller
     public function create()
     {
         //
-        return view('roles.ajouter');
+        return view('layouts.roles.ajouter');
     }
 
     /**
@@ -55,7 +55,7 @@ class RoleController extends Controller
     {
         //
         $role = Role::findOrFail($id);
-        return view('roles.modifier', compact('role'));
+        return view('layouts.roles.modifier', compact('role'));
     }
 
     /**

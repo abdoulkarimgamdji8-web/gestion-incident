@@ -43,9 +43,19 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function incidents()
+    public function domaine()
+    {
+        return $this->belongsTo(Domaine::class, 'domaine_id');
+    }
+
+    public function incidentsAssignes()
     {
         return $this->hasMany(Incident::class, 'technicien_assigne_id');
+    }
+
+    public function incidentsDeclares()
+    {
+        return $this->hasMany(Incident::class, 'declarant_id');
     }
 
     public function interventions()

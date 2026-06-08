@@ -18,9 +18,8 @@
 </div>
 <!-- partial:partials/_navbar.html -->
 <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-  <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-    <a class="navbar-brand brand-logo" href="index.html"><img src="{{ asset('dist/assets/images/logo.svg') }}" alt="logo" /></a>
-    <a class="navbar-brand brand-logo-mini" href="index.html"><img src="{{ asset('dist/assets/images/logo-mini.svg') }}" alt="logo" /></a>
+  <div class="brand-logo text-center mb-4">
+    <img src="{{ asset('dist/assets/images/logo.jpg') }}" alt="Logo" style="width: 20%; height: 5%; object-fit: contain;">
   </div>
   <div class="navbar-menu-wrapper d-flex align-items-stretch">
     <!--
@@ -41,11 +40,10 @@
 -->
     </div>
     <ul class="navbar-nav navbar-nav-right">
-      @auth
       <li class="nav-item nav-profile dropdown">
         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="nav-profile-img">
-            <img src="{{ asset('dist/assets/images/faces/face1.jpg') }}" alt="image">
+            <img src="{{ asset('dist/assets/images/account.jpg') }}" alt="image">
             <span class="availability-status online"></span>
           </div>
           <div class="nav-profile-text">
@@ -64,11 +62,6 @@
           </form>
         </div>
       </li>
-      @else
-      <li class="nav-item">
-        <a class="nav-link" href="{{ route('login') }}">Login</a>
-      </li>
-      @endauth
       <!--
       <li class="nav-item d-none d-lg-block full-screen-link">
         <a class="nav-link">

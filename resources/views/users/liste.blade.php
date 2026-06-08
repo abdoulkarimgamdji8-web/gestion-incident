@@ -30,7 +30,7 @@
             <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        
+
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
@@ -47,18 +47,24 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $user->nom }}</td>
-                                        <td>{{ $user->role->name ?? '-' }}</td>
+                                        <td>{{ $user->role->nom_role ?? 'N/A' }}</td>
                                         <td>
-                                            <label class="badge badge-gradient-{{ isset($user->is_active) && $user->is_active ? 'success' : 'danger' }}">
-                                                {{ isset($user->is_active) && $user->is_active ? 'Actif' : 'Inactif' }}
-                                            </label>
+                                            <p>
+                                                @if ($user->statut)
+                                                <span class="badge badge-gradient-success">Actif</span>
+                                                @else
+                                                <span class="badge badge-gradient-danger">Inactif</span>
+                                                @endif
+                                            </p>
                                         </td>
                                         <td>
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                            <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-outline-dark">Voir</a>
+                                            {{-- Use a form for toggle to match typical POST/PATCH route and ensure action works --}}
+                                            <form action="{{ route('users.toggleStatus', $user->id) }}" method="POST" style="display:inline">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-sm {{ $user->statut ? 'btn-outline-danger' : 'btn-outline-success' }}">{{ $user->statut ? 'Désactiver' : 'Activer' }}</button>
                                             </form>
                                         </td>
                                     </tr>
