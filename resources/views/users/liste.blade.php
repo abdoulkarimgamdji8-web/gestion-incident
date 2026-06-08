@@ -6,10 +6,7 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white me-2">
-                    <i class="mdi mdi-account-multiple"></i>
-                </span>
-                Gestion des utilisateurs
+               
             </h3>
             <nav aria-label="breadcrumb">
                 <ul class="breadcrumb">

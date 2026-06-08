@@ -12,7 +12,7 @@ $role = $user->role->nom_role;
         <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                    <img src="{{ asset('dist/assets/images/account.jpg') }}" alt="profile" />
+                    <img src="{{ asset('dist/assets/images/image.jpeg') }}" alt="profile" />
                     <span class="login-status online"></span>
                     <!--change to offline or busy as needed-->
                 </div>

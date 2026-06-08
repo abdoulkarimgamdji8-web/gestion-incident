@@ -31,12 +31,7 @@
                             <label for="password" class="sr-only">Mot de passe</label>
                             <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Mot de passe" required>
                         </div>
-                        <div class="my-2 d-flex justify-content-between align-items-center">
-                            <div class="form-check">
-                                <label class="form-check-label text-muted">
-                                    <input type="checkbox" class="form-check-input" name="remember">
-                                </label>
-                            </div>
+                        <div class="my-2 text-center">
                             <a href="#" class="auth-link text-primary">Mot de passe oublié ?</a>
                         </div>
                         <div class="mt-3 d-grid gap-2">
