@@ -39,7 +39,7 @@ $role = $user->role->nom_role;
         </li>
         @endif
 
-        @if ($role == 'Directeur Technique' || $role == 'Responsable DT')
+        @if ($role == 'Directeur Technicien' || $role == 'Responsable DT')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('incidents.index') }}">
                 <span class="menu-title">Gestion des incidents</span>
@@ -59,7 +59,7 @@ $role = $user->role->nom_role;
 
         @if ($role == 'Technicien' || $role == 'Prestataire Externe')
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('interventions.index') }}">
+            <a class="nav-link" href="{{ route('interventions.mes_interventions') }}">
                 <span class="menu-title">Mes interventions</span>
                 <i class="mdi mdi-alert-circle menu-icon"></i>
             </a>

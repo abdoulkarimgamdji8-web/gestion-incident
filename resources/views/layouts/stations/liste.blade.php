@@ -6,8 +6,10 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                
-
+                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                    <i class="mdi mdi-map-marker-radius"></i>
+                </span>
+                Gestion des stations
             </h3>
             <nav aria-label="breadcrumb">
                 <ul class="breadcrumb">
@@ -57,22 +59,23 @@
                                         <td>{{ $station->ville }}</td>
                                         <td>{{ $station->zone }}</td>
                                         <td>
-                                            @if ($station->statut)
-                                            <span class="badge badge-gradient-primary">Actif</span>
-                                            @else
-                                            <span class="badge badge-gradient-secondary">Inactif</span>
-                                            @endif
+                                            <p>
+                                                @if ($station->statut)
+                                                <span class="badge badge-gradient-success">Actif</span>
+                                                @else
+                                                <span class="badge badge-gradient-danger">Inactif</span>
+                                                @endif
+                                            </p>
                                         </td>
                                         <td>
                                             <a href="{{ route('stations.edit', $station->id) }}" class="btn btn-sm btn-outline-primary">
                                                 <i class="mdi mdi-pencil"></i> Modifier
                                             </a>
-                                            <form action="{{ route('stations.destroy', $station->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette station ?');">
+                                            {{-- Use a form for toggle to match typical POST/PATCH route and ensure action works --}}
+                                            <form action="{{ route('stations.toggleStatus', $station->id) }}" method="POST" style="display:inline">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="mdi mdi-delete"></i> Supprimer
-                                                </button>
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-sm {{ $station->statut ? 'btn-outline-danger' : 'btn-outline-success' }}">{{ $station->statut ? 'Désactiver' : 'Activer' }}</button>
                                             </form>
                                         </td>
                                     </tr>

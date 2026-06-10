@@ -21,7 +21,7 @@ class StationController extends Controller
      */
     public function create()
     {
-        return view('layouts.stations.ajouter');
+        return view('stations.ajouter');
     }
 
     /**
@@ -40,7 +40,7 @@ class StationController extends Controller
             'nom' => $validated['nom'],
             'ville' => $validated['ville'],
             'zone' => $validated['zone'],
-            'statut' => $request->has('statut') ? 'active' : 'inactive',
+            'statut' => $request->has('statut'),
         ]);
 
         return redirect()->route('stations.index')->with('success', 'Station ajoutée avec succès.');
@@ -77,11 +77,20 @@ class StationController extends Controller
             'statut' => 'sometimes|boolean',
         ]);
 
+            $hasChanges = $station->nom !== $validated['nom'] ||
+                        $station->ville !== $validated['ville'] ||
+                        $station->zone !== $validated['zone'] ||
+                        (bool) $station->statut !== (bool) $request->has('statut');
+
+        if (!$hasChanges) {
+            return back()->with('info', 'Aucune modification détectée. Veuillez cliquer sur Retour pour revenir en arrière.')->withInput();
+        }
+
         $station->update([
             'nom' => $validated['nom'],
             'ville' => $validated['ville'],
             'zone' => $validated['zone'],
-            'statut' => $request->has('statut') ? 'active' : 'inactive',
+            'statut' => $request->has('statut'),
         ]);
 
         return redirect()->route('stations.index')->with('success', 'Station mise à jour avec succès.');
@@ -96,5 +105,14 @@ class StationController extends Controller
         $station->delete();
 
         return redirect()->route('stations.index')->with('success', 'Station supprimée avec succès.');
+    }
+
+    public function toggleStatus(string $id)
+    {
+        $station = Station::findOrFail($id);
+        $station->statut = !$station->statut;
+        $station->save();
+
+        return redirect()->route('stations.index')->with('success', 'Statut de la station mis à jour avec succès');
     }
 }

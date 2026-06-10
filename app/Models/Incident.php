@@ -65,4 +65,8 @@ class Incident extends Model
     {
         return $this->hasMany(Pieces::class);
     }
+    public function commentaires()
+{
+    return $this->hasMany(Commentaire::class);
+}
 }

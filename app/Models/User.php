@@ -72,4 +72,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Historique::class);
     }
+    public function commentaires()
+{
+    return $this->hasMany(Commentaire::class);
+}
 }

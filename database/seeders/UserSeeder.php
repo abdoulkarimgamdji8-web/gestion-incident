@@ -22,7 +22,9 @@ class UserSeeder extends Seeder
         $plainPassword = '12345678';
 
         $adminRole = Role::firstWhere('nom_role', 'Admin');
+        $technicianRole = Role::firstWhere('nom_role', 'Technicien');
 
+        // Create Admin user
         User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
@@ -30,10 +32,26 @@ class UserSeeder extends Seeder
                 'prenom' => 'User',
                 'email' => 'admin@example.com',
                 'password' => Hash::make($plainPassword),
-                'numero' => '0612345678',
+                'numero' => '0612345670',
                 'date' => now()->subYears(30),
-                'statut' => '1',
-                'role_id' => 1,
+                'statut' => 1,
+                'role_id' => $adminRole->id,
+                'remember_token' => Str::random(10),
+            ]
+        );
+
+        // Create Technician user
+        User::updateOrCreate(
+            ['email' => 'technicien@example.com'],
+            [
+                'nom' => 'Technicien',
+                'prenom' => 'Test',
+                'email' => 'technicien@example.com',
+                'password' => Hash::make($plainPassword),
+                'numero' => '0612345671',
+                'date' => now()->subYears(30),
+                'statut' => 1,
+                'role_id' => $technicianRole->id,
                 'remember_token' => Str::random(10),
             ]
         );
