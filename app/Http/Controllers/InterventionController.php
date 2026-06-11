@@ -83,7 +83,7 @@ class InterventionController extends Controller
             'contenu'       => 'required|string',
             'resultat'      => 'required|string|max:255',
             'observation'   => 'nullable|string',
-            'pieces_jointes.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'pieces_jointes.*' => '|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
         ]);
 
         // Mettre à jour l'intervention

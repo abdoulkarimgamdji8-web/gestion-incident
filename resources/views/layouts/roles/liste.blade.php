@@ -14,12 +14,12 @@
                     <li class="breadcrumb-item active" aria-current="page">
                         <span></span>
                         Liste des rôles
-                        <i class="mdi mdi-shield-outline icon-sm text-primary align-middle"></i>
+                       
                     </li>
                 </ul>
             </nav>
             <div class="d-flex justify-content-end mt-3">
-                <a href="{{ route('roles.create') }}" class="btn btn-gradient-primary btn-icon-text">
+                <a href="{{ route('roles.create') }}" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white btn-icon-text">
                     <i class="mdi mdi-plus btn-icon-prepend"></i>
                     Ajouter un rôle
                 </a>
@@ -52,7 +52,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $role->nom_role }}</td>
                                         <td>
-                                            <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-sm btn-outline-warning">
                                                 <i class="mdi mdi-pencil"></i> Modifier
                                             </a>
                                             <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce rôle ? Cette action est irréversible.');">

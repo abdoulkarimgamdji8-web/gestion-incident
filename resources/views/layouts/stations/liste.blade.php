@@ -6,22 +6,22 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white me-2">
-                    <i class="mdi mdi-map-marker-radius"></i>
+               
+                   
                 </span>
-                Gestion des stations
+               
             </h3>
             <nav aria-label="breadcrumb">
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item active" aria-current="page">
                         <span></span>
                         Liste des stations
-                        <i class="mdi mdi-map-marker-circle icon-sm text-primary align-middle"></i>
+                       
                     </li>
                 </ul>
             </nav>
             <div class="d-flex justify-content-end mt-3">
-                <a href="{{ route('stations.create') }}" class="btn btn-gradient-primary btn-icon-text">
+                <a href="{{ route('stations.create') }}" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white; btn-icon-text">
                     <i class="mdi mdi-plus btn-icon-prepend"></i>
                     Ajouter une station
                 </a>
@@ -61,14 +61,14 @@
                                         <td>
                                             <p>
                                                 @if ($station->statut)
-                                                <span class="badge badge-gradient-success">Actif</span>
+                                                <span class="badge badge--icon-text"style="background: #1e8449; border-color: #1e8449; color:white">Actif</span>
                                                 @else
                                                 <span class="badge badge-gradient-danger">Inactif</span>
                                                 @endif
                                             </p>
                                         </td>
                                         <td>
-                                            <a href="{{ route('stations.edit', $station->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('stations.edit', $station->id) }}" class="btn btn-sm btn-outline-warning">
                                                 <i class="mdi mdi-pencil"></i> Modifier
                                             </a>
                                             {{-- Use a form for toggle to match typical POST/PATCH route and ensure action works --}}

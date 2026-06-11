@@ -7,7 +7,7 @@
 
       <div class="auth-form-light text-left p-4 p-lg-5">
         <div class="brand-logo text-center mb-4">
-          <img src="{{ asset('dist/assets/images/logo.svg') }}" alt="logo">
+          <img src="{{ asset('dist/assets/images/') }}" alt="">
         </div>
         <h3 class="text-center mb-2">Modifier un rôle</h3>
         <p class="text-center text-muted mb-4">Mettez à jour les informations du rôle.</p>

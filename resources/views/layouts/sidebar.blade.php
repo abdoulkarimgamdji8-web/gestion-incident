@@ -30,7 +30,7 @@ $role = $user->role->nom_role;
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
         </li>
-        @if ($role == 'Admin')
+        @if ($role == 'Administrateur système')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('users.index') }}">
                 <span class="menu-title">Gestion des utilisateurs</span>
@@ -39,7 +39,7 @@ $role = $user->role->nom_role;
         </li>
         @endif
 
-        @if ($role == 'Directeur Technicien' || $role == 'Responsable DT')
+        @if ($role == 'Directeur maintenance' || $role == 'Responsable maintenance')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('incidents.index') }}">
                 <span class="menu-title">Gestion des incidents</span>
@@ -48,7 +48,7 @@ $role = $user->role->nom_role;
         </li>
         @endif
 
-        @if ($role == 'Agent Station')
+        @if ($role == 'Sous-gérant de station')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('incidents.mes_incidents') }}">
                 <span class="menu-title">Mes incidents</span>
@@ -57,7 +57,7 @@ $role = $user->role->nom_role;
         </li>
         @endif
 
-        @if ($role == 'Technicien' || $role == 'Prestataire Externe')
+        @if ($role == 'Technicien' || $role == 'Prestataire externe')
         <li class="nav-item">
             <a class="nav-link" href="{{ route('interventions.mes_interventions') }}">
                 <span class="menu-title">Mes interventions</span>
@@ -208,7 +208,7 @@ $role = $user->role->nom_role;
             </div>
         </li>
 -->
-        @if ($role == 'Admin')
+        @if ($role == 'Administrateur système')
         <li class="nav-item">
             <a
                 class="nav-link"

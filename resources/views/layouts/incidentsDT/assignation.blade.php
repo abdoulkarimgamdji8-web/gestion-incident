@@ -5,7 +5,7 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white me-2">
+                <span class="page-title-icon -icon-text"style="background: #1e8449; border-color: #1e8449; color:white; text-white me-2">
                     <i class="mdi mdi-account-arrow-right"></i>
                 </span>
                 Assigner l'incident
@@ -28,7 +28,7 @@
             {{-- Récapitulatif de l'incident --}}
             <div class="col-md-5 mb-4">
                 <div class="card h-100">
-                    <div class="card-header bg-gradient-primary text-white">
+                    <div class="card-header -icon-text"style="background: #1e8449; border-color: #1e8449; color:white text-white">
                         <h5 class="mb-0">
                             <i class="mdi mdi-alert-circle-outline"></i>
                             INC-{{ str_pad($incident->id, 6, '0', STR_PAD_LEFT) }}
@@ -125,7 +125,7 @@
                             </div>
 
                             <div class="d-flex gap-2 mt-4">
-                                <button type="submit" class="btn btn-gradient-primary btn-lg flex-grow-1">
+                                <button type="submit" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white btn-lg flex-grow-1">
                                     <i class="mdi mdi-check-circle"></i> Confirmer l'assignation
                                 </button>
                                 <a href="{{ route('incidents.index') }}" class="btn btn-secondary btn-lg">

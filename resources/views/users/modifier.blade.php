@@ -7,7 +7,7 @@
 
       <div class="auth-form-light text-left p-4 p-lg-5">
         <div class="brand-logo text-center mb-4">
-          <img src="{{ asset('dist/assets/images/logo.svg') }}" alt="logo">
+          <img src="{{ asset('dist/assets/images/') }}" alt="">
         </div>
         <h3 class="text-center mb-2">Modifier un utilisateur</h3>
         <p class="text-center text-muted mb-4">Mettez à jour les informations de l'utilisateur.</p>
@@ -92,7 +92,7 @@
           </div>
 
           <div class="mt-4 d-flex gap-2">
-            <button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Enregistrer</button>
+            <button type="submit" class="btn btn-gradient-warning btn-lg font-weight-medium auth-form-btn flex-grow-1">Enregistrer</button>
             <a href="{{ route('users.index') }}" class="btn btn-secondary btn-lg font-weight-medium auth-form-btn flex-grow-1">Retour</a>
           </div>
         </form>

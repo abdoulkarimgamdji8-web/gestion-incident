@@ -7,7 +7,7 @@
 
       <div class="auth-form-light text-left p-4 p-lg-5">
         <div class="brand-logo text-center mb-4">
-          <img src="{{ asset('dist/assets/images/logo.svg') }}" alt="logo">
+          <img src="{{ asset('dist/assets/images/') }}" alt="">
         </div>
         <h3 class="text-center mb-2">Ajouter une station</h3>
         <p class="text-center text-muted mb-4">Créez une nouvelle station pour le suivi.</p>
@@ -48,7 +48,7 @@
           </div>
 
           <div class="mt-4 d-flex gap-2">
-            <button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Ajouter</button>
+            <button type="submit" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white; btn-lg font-weight-medium auth-form-btn flex-grow-1">Ajouter</button>
             <a href="{{ route('stations.index') }}" class="btn btn-secondary btn-lg font-weight-medium auth-form-btn flex-grow-1">Retour</a>
           </div>
         </form>

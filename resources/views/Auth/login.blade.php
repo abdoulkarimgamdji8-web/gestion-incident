@@ -32,10 +32,10 @@
                             <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Mot de passe" required>
                         </div>
                         <div class="my-2 text-center">
-                            <a href="#" class="auth-link text-primary">Mot de passe oublié ?</a>
+                            <a href="#" class="auth-link text-success">Mot de passe oublié ?</a>
                         </div>
                         <div class="mt-3 d-grid gap-2">
-                            <button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">Se connecter</button>
+                            <button type="submit" class="btn btn-icon-text"style="background: #1e8449; border-color: #1e8449; color:white;">Se connecter</button>
                         </div>
                     </form>
                 </div>

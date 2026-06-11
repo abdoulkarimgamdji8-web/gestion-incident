@@ -5,21 +5,20 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white me-2">
-                    <i class="mdi mdi-account-circle"></i>
+                
                 </span>
-                Mes incidents déclarés
+               
             </h3>
             <nav aria-label="breadcrumb">
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">
+                
+                    
                         <span></span>
                         Tableau de mes incidents
                     </li>
                 </ul>
             </nav>
             <div class="d-flex justify-content-end mt-3">
-                <a href="{{ route('incidents.create') }}" class="btn btn-gradient-primary btn-icon-text">
+                <a href="{{ route('incidents.create') }}" class="btn btn-icon-text-icon-text"style="background: #1e8449; border-color: #1e8449; color:white;">
                     <i class="mdi mdi-plus btn-icon-prepend"></i>
                     Déclarer un incident
                 </a>
@@ -73,13 +72,27 @@
                                             @endswitch
                                         </td>
                                         <td>
-                                            <a href="{{ route('incidents.show', $incident->id) }}" class="btn btn-sm btn-outline-info">
+                                            <a href="{{ route('incidents.show', $incident->id) }}"
+                                                class="btn btn-sm btn-outline-info mb-1" title="Voir détails et contacter le directeur maintenance en cas de problème">
                                                 <i class="mdi mdi-eye"></i>
                                             </a>
+
                                             @if($incident->statut === 'declare')
-                                            <a href="{{ route('incidents.edit', $incident->id) }}" class="btn btn-sm btn-outline-warning">
+                                            <a href="{{ route('incidents.edit', $incident->id) }}"
+                                                class="btn btn-sm btn-outline-warning mb-1" title="Modifier">
                                                 <i class="mdi mdi-pencil"></i>
                                             </a>
+                                            @endif
+
+                                            @if($incident->statut === 'resolu')
+                                            <form action="{{ route('incidents.cloturer', $incident->id) }}"
+                                                method="POST" style="display:inline-block;"
+                                                onsubmit="return confirm('Confirmer la clôture ? Cela signifie que vous avez vérifié la réparation sur le terrain.')">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-success mb-1" title="Clôturer">
+                                                    <i class="mdi mdi-checkbox-marked-circle"></i> Clôturer
+                                                </button>
+                                            </form>
                                             @endif
                                         </td>
                                     </tr>

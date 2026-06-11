@@ -21,7 +21,7 @@ class StationController extends Controller
      */
     public function create()
     {
-        return view('stations.ajouter');
+        return view('layouts.stations.ajouter');
     }
 
     /**

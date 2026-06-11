@@ -53,7 +53,7 @@
 					</div>
 
 					<div class="mt-4 d-flex gap-2">
-						<button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Enregistrer</button>
+						<button type="submit" class="btn btn-gradient-warning btn-lg font-weight-medium auth-form-btn flex-grow-1">Enregistrer</button>
 						<a href="{{ route('equipements.index') }}" class="btn btn-secondary btn-lg font-weight-medium auth-form-btn flex-grow-1">Retour</a>
 					</div>
 				</form>

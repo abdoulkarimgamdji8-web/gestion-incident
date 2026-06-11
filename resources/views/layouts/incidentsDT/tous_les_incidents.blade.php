@@ -5,16 +5,13 @@
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white me-2">
-                    <i class="mdi mdi-alert-circle-outline"></i>
-                </span>
-                Tous les incidents
-            </h3>
+                
+               
             <nav aria-label="breadcrumb">
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item active" aria-current="page">
                         <span></span>
-                        Tableau des incidents
+                       Liste des incidents
                     </li>
                 </ul>
             </nav>
@@ -87,20 +84,16 @@
 
                                             @if($incident->statut === 'declare')
                                             <a href="{{ route('incidents.assignation', $incident->id) }}"
-                                                class="btn btn-sm btn-outline-primary mb-1" title="Assigner">
+                                                class="btn btn-sm btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white mb-1" title="Assigner">
                                                 <i class="mdi mdi-account-arrow-right"></i>
                                             </a>
                                             @endif
 
                                             @if($incident->statut === 'resolu')
-                                            <form action="{{ route('incidents.cloturer', $incident->id) }}"
-                                                method="POST" style="display:inline-block;"
-                                                onsubmit="return confirm('Clôturer cet incident ?')">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-success mb-1" title="Clôturer">
-                                                    <i class="mdi mdi-checkbox-marked-circle"></i>
-                                                </button>
-                                            </form>
+                                            <a href="{{ route('incidents.details_rapport', $incident->id) }}"
+                                                class="btn btn-sm btn-outline-success mb-1" title="Voir rapport ">
+                                                <i class="mdi mdi-checkbox-marked-circle"></i>
+                                            </a>
                                             @endif
 
                                             <a href="{{ route('incidents.historique', $incident->id) }}"

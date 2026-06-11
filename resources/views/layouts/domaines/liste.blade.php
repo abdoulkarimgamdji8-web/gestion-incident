@@ -13,12 +13,12 @@
                     <li class="breadcrumb-item active" aria-current="page">
                         <span></span>
                         Liste des domaines
-                        <i class="mdi mdi-earth-outline icon-sm text-primary align-middle"></i>
+                        
                     </li>
                 </ul>
             </nav>
             <div class="d-flex justify-content-end mt-3">
-                <a href="{{ route('domaines.create') }}" class="btn btn-gradient-primary btn-icon-text">
+                <a href="{{ route('domaines.create') }}" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white btn-icon-text">
                     <i class="mdi mdi-plus btn-icon-prepend"></i>
                     Ajouter un domaine
                 </a>
@@ -51,7 +51,7 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $domaine->nom_domaine }}</td>
                                         <td>
-                                            <a href="{{ route('domaines.edit', $domaine->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('domaines.edit', $domaine->id) }}" class="btn btn-sm btn-outline-warning">
                                                 <i class="mdi mdi-pencil"></i> Modifier
                                             </a>
                                             <form action="{{ route('domaines.destroy', $domaine->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce domaine ? Cette action est irréversible.');">

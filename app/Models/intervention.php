@@ -3,23 +3,37 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class intervention extends Model
+class Intervention extends Model
 {
-    public function incident(): BelongsTo
+    protected $table = 'intervention';
+
+    protected $fillable = [
+        'date_debut',
+        'date_fin',
+        'resultat',
+        'observation',
+        'incident_id',
+        'technicien_id',
+    ];
+
+    protected $casts = [
+        'date_debut' => 'date',
+        'date_fin' => 'date',
+    ];
+
+    public function incident()
     {
         return $this->belongsTo(Incident::class);
     }
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class, 'technicien_id');
     }
 
-    public function rapport(): HasOne
+    public function rapport()
     {
-        return $this->hasOne(rapport::class);
+        return $this->hasOne(Rapport::class);
     }
 }

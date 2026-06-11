@@ -81,6 +81,7 @@ class IncidentController extends Controller
     // Enregistrement de la déclaration
     public function store(Request $request)
     {
+        
         $validated = $request->validate([
             'titre'         => 'required|string|max:255',
             'description'   => 'required|string',
@@ -99,7 +100,7 @@ class IncidentController extends Controller
                     }
                 }
             ],
-            'pieces_jointes.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'pieces_jointes.*' => '|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
         ]);
 
         $validated['statut']           = 'declare';
@@ -111,19 +112,22 @@ class IncidentController extends Controller
         $incident = Incident::create($validated);
 
         // Sauvegarder les pièces jointes
-        if ($request->hasFile('piece_jointes')) {
-            foreach ($request->file('piece_jointes') as $file) {
-                $chemin = $file->store('piece_jointes', 'public');
+        
+       if ($request->hasFile('pieces_jointes')) {
+    foreach ($request->file('pieces_jointes') as $file) {
+        $chemin = $file->store('pieces_jointes', 'public');
 
-                Pieces::create([
-                    'nom_fichier'    => $file->getClientOriginalName(),
-                    'type_fichier'   => $file->getClientMimeType(),
-                    'chemin_fichier' => $chemin,
-                    'incident_id'    => $incident->id,
-                    'source'         => 'declaration',
-                ]);
-            }
-        }
+        $piece = Pieces::create([
+            'nom_fichier'    => $file->getClientOriginalName(),
+            'type_fichier'   => $file->getClientMimeType(),
+            'chemin_fichier' => $chemin,
+            'incident_id'    => $incident->id,
+            'source'         => 'declaration',
+        ]);
+
+        
+    }
+}
 
         // Mettre l'équipement en panne
         Equipement::where('id', $validated['equipement_id'])
@@ -146,7 +150,7 @@ class IncidentController extends Controller
             'commentaires.user',
         ])->findOrFail($id);
 
-        return view('incidentsAgent.details', compact('incident'));
+        return view('layouts.incidentsAgent.details', compact('incident'));
     }
 
     // Formulaire de modification (agent, avant assignation)
@@ -171,7 +175,7 @@ class IncidentController extends Controller
             ->orderBy('nom')
             ->get();
 
-        return view('incidentsAgent.modifier', compact('incident', 'domaines', 'stations', 'equipements'));
+        return view('layouts.incidentsAgent.modifier', compact('incident', 'domaines', 'stations', 'equipements'));
     }
 
     // Mise à jour (agent, avant assignation)
@@ -228,7 +232,7 @@ class IncidentController extends Controller
             ->orderBy('nom')
             ->get();
 
-        return view('incidentsDT.assignation', compact('incident', 'intervenants'));
+        return view('layouts.incidentsDT.assignation', compact('incident', 'intervenants'));
     }
 
     // Traitement de l'assignation
@@ -260,7 +264,7 @@ class IncidentController extends Controller
         $incident    = Incident::with(['domaine', 'station', 'equipement', 'declarant'])->findOrFail($id);
         $historiques = Historique::where('user_id', Auth::id())->orderByDesc('date_action')->get();
 
-        return view('incidentsDT.historique', compact('incident', 'historiques'));
+        return view('layouts.incidentsDT.historique', compact('incident', 'historiques'));
     }
 
     // Suppression
@@ -296,7 +300,7 @@ class IncidentController extends Controller
             ->orderBy('nom')
             ->get();
 
-        return view('incidentsDT.details_rapport', compact('incident', 'intervenants'));
+        return view('layouts.incidentsDT.details_rapport', compact('incident', 'intervenants'));
     }
 
     public function reassigner(Request $request, string $id)

@@ -52,7 +52,7 @@
 					</div>
 
 					<div class="mt-4 d-flex gap-2">
-						<button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Ajouter</button>
+						<button type="submit" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white; btn-lg font-weight-medium auth-form-btn flex-grow-1">Ajouter</button>
 						<a href="{{ route('equipements.index') }}" class="btn btn-secondary btn-lg font-weight-medium auth-form-btn flex-grow-1">Retour</a>
 					</div>
 				</form>

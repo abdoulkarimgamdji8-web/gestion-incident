@@ -13,12 +13,12 @@
                     <li class="breadcrumb-item active" aria-current="page">
                         <span></span>
                         Liste des utilisateurs
-                        <i class="mdi mdi-account-circle-outline icon-sm text-primary align-middle"></i>
+                        
                     </li>
                 </ul>
             </nav>
             <div class="d-flex justify-content-end mt-3">
-                <a href="{{ route('users.create') }}" class="btn btn-gradient-primary btn-icon-text">
+                <a href="{{ route('users.create') }}" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white btn-icon-text">
                     <i class="mdi mdi-account-plus btn-icon-prepend"></i>
                 </a>
             </div>
@@ -48,14 +48,14 @@
                                         <td>
                                             <p>
                                                 @if ($user->statut)
-                                                <span class="badge badge-gradient-success">Actif</span>
+                                                <span class="badge badge--icon-text"style="background: #1e8449; border-color: #1e8449; color:white">Actif</span>
                                                 @else
                                                 <span class="badge badge-gradient-danger">Inactif</span>
                                                 @endif
                                             </p>
                                         </td>
                                         <td>
-                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-outline-warning">Modifier</a>
                                             <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-outline-dark">Voir</a>
                                             {{-- Use a form for toggle to match typical POST/PATCH route and ensure action works --}}
                                             <form action="{{ route('users.toggleStatus', $user->id) }}" method="POST" style="display:inline">

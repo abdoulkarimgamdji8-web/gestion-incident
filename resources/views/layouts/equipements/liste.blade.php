@@ -13,12 +13,12 @@
 					<li class="breadcrumb-item active" aria-current="page">
 						<span></span>
 						Liste des équipements
-						<i class="mdi mdi-desktop-tower-monitor icon-sm text-primary align-middle"></i>
+						
 					</li>
 				</ul>
 			</nav>
 			<div class="d-flex justify-content-end mt-3">
-				<a href="{{ route('equipements.create') }}" class="btn btn-gradient-primary btn-icon-text">
+				<a href="{{ route('equipements.create') }}" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white; btn-icon-text">
 					<i class="mdi mdi-plus btn-icon-prepend"></i>
 					Ajouter un équipement
 				</a>
@@ -57,7 +57,7 @@
 										<td>{{ $equipement->type }}</td>
 										<td>
 											@if ($equipement->etat === 'fonctionnel')
-											<span class="badge badge-gradient-success">Fonctionnel</span>
+											<span class="badge badge--icon-text"style="background: #1e8449; border-color: #1e8449; color:white">Fonctionnel</span>
 											@elseif ($equipement->etat === 'en_panne')
 											<span class="badge badge-gradient-warning">En panne</span>
 											@else
@@ -66,7 +66,7 @@
 										</td>
 										<td>{{ optional($equipement->station)->nom ?? 'N/A' }}</td>
 										<td>
-											<a href="{{ route('equipements.edit', $equipement->id) }}" class="btn btn-sm btn-outline-primary">
+											<a href="{{ route('equipements.edit', $equipement->id) }}" class="btn btn-sm btn-outline-warning">
 												<i class="mdi mdi-pencil"></i> Modifier
 											</a>
 											<form action="{{ route('equipements.destroy', $equipement->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet équipement ?');">

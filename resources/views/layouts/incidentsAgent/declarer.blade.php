@@ -18,7 +18,8 @@
                 </div>
                 @endif
 
-                <form class="pt-3" method="POST" action="{{ route('incidents.store') }}">
+                <form class="pt-3" method="POST" action="{{ route('incidents.store') }}"
+                    enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group mb-3">
@@ -74,14 +75,24 @@
                         </select>
                     </div>
 
+                    <div class="form-group mb-3">
+                        <label class="form-label">
+                            Pièces jointes <span class="text-muted small">(optionnel — images, PDF, Word)</span>
+                        </label>
+                        <input type="file" name="pieces_jointes[]"
+                            class="form-control form-control-lg"
+                            multiple accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                        <small class="text-muted">Taille max : 5 Mo par fichier.</small>
+                    </div>
+
                     <div class="mt-4 d-flex gap-2">
-                        <button type="submit" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Déclarer</button>
+                        <button type="submit" class="btn btn--icon-text"style="background: #1e8449; border-color: #1e8449; color:white btn-lg font-weight-medium auth-form-btn flex-grow-1">Déclarer</button>
                         <a href="{{ route('incidents.mes_incidents') }}" class="btn btn-secondary btn-lg font-weight-medium auth-form-btn flex-grow-1">Retour</a>
                     </div>
                 </form>
-                
+
                 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
+                    document.addEventListener('DOMContentLoaded', function() {
                         const stationSelect = document.getElementById('station_id');
                         const equipSelect = document.getElementById('equipement_id');
 
@@ -106,7 +117,7 @@
                             }
 
                             const filtered = allOptions.filter(o => String(o.station) === String(stationId));
-                            
+
                             if (filtered.length === 0) {
                                 // Show alert and disable select if no equipment found
                                 noEquipAlert.classList.remove('d-none');
@@ -114,10 +125,10 @@
                                 equipSelect.value = '';
                                 return;
                             }
-                            
+
                             // Hide alert and enable select if equipment found
                             noEquipAlert.classList.add('d-none');
-                            
+
                             filtered.forEach(o => {
                                 const opt = document.createElement('option');
                                 opt.value = o.value;
@@ -142,7 +153,7 @@
                                 equipSelect.disabled = true;
                             }
 
-                            stationSelect.addEventListener('change', function () {
+                            stationSelect.addEventListener('change', function() {
                                 populateEquipements(this.value);
                             });
                         }
