@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-panel">
+
   <div class="content-wrapper d-flex align-items-center justify-content-center auth" style="min-height:100vh;">
     <div class="col-lg-8 col-md-10 col-sm-12" style="max-width:760px; width:100%;">
 
@@ -94,7 +94,7 @@
       </div>
     </div>
   </div>
-</div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const roleField = document.getElementById('role');

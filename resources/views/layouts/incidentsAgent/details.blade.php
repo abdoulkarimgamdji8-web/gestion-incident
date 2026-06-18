@@ -7,11 +7,11 @@ $role = $user->role->nom_role;
 @extends('layouts.app')
 
 @section('content')
-    <div class="main-panel">
+    
         <div class="content-wrapper">
             <div class="page-header">
                 <h3 class="page-title">
-                    <span class="page-title-icon bg-gradient-primary text-white me-2">
+                    
                         <i class="mdi mdi-file-document-box"></i>
                     </span>
                     Détail de l'incident
@@ -150,7 +150,7 @@ $role = $user->role->nom_role;
                                         <div class="card border">
                                             <div class="card-body">
                                                 <h5 class="card-title">
-                                                    <i class="mdi mdi-message-text-outline text-primary"></i>
+                                                    <i class="mdi mdi-message-text-outline text-warning"></i>
                                                     Mémos
                                                 </h5>
 
@@ -240,5 +240,5 @@ $role = $user->role->nom_role;
                 </div>
             </div>
         </div>
-    </div>
+    
 @endsection

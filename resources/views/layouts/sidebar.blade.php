@@ -37,7 +37,8 @@ $role = $user->role->nom_role;
                 <i class="mdi mdi-account-multiple menu-icon"></i>
             </a>
         </li>
-        @endif
+         @endif
+        
 
         @if ($role == 'Directeur maintenance' || $role == 'Responsable maintenance')
         <li class="nav-item">

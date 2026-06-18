@@ -11,7 +11,7 @@ return new class extends Migration
      */
    public function up(): void
 {
-    Schema::table('pieces_jointes', function (Blueprint $table) {
+    Schema::table('piece_jointes', function (Blueprint $table) {
         $table->enum('source', ['declaration', 'rapport'])
               ->default('declaration')
               ->after('incident_id');

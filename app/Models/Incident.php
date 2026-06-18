@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Incident extends Model
 {
     // Utiliser le nom de table pluriel standard
-    protected $table = 'incidents';
+    protected $table = 'incident';
 
     protected $fillable = [
         'titre',

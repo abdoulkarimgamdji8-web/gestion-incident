@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-panel">
+
     <div class="content-wrapper d-flex align-items-center justify-content-center auth" style="min-height:100vh;">
         <div class="col-lg-8 col-md-10 col-sm-12" style="max-width:760px; width:100%;">
             <div class="auth-form-light text-left p-4 p-lg-5">
@@ -99,10 +99,10 @@
 
                 <div class="d-flex gap-2">
                     <a href="{{ route('users.index') }}" class="btn btn-secondary btn-lg font-weight-medium auth-form-btn flex-grow-1">Retour</a>
-                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-gradient-primary btn-lg font-weight-medium auth-form-btn flex-grow-1">Modifier</a>
+                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-lg font-weight-medium auth-form-btn flex-grow-1">Modifier</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
 @endsection

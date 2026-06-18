@@ -106,6 +106,8 @@ class IncidentController extends Controller
         $validated['statut']           = 'declare';
         $validated['date_signalement'] = now();
         $validated['declarant_id']     = Auth::id();
+         $validated['technicien_assigne_id'] = null;
+
         
 
 
@@ -115,7 +117,7 @@ class IncidentController extends Controller
         
        if ($request->hasFile('pieces_jointes')) {
     foreach ($request->file('pieces_jointes') as $file) {
-        $chemin = $file->store('pieces_jointes', 'public');
+        $chemin = $file->store('piece_jointes', 'public');
 
         $piece = Pieces::create([
             'nom_fichier'    => $file->getClientOriginalName(),
@@ -227,7 +229,7 @@ class IncidentController extends Controller
         }
 
         $intervenants = User::whereHas('role', fn($q) => $q->where('nom_role', 'Technicien')->orWhere('nom_role', 'Prestataire Externe'))
-            ->where('domaine_id', $incident->domaine_id)
+            ->where('domaine', $incident->domaine_id)
             ->where('disponibilite', true)
             ->orderBy('nom')
             ->get();
@@ -295,7 +297,7 @@ class IncidentController extends Controller
             $q->where('nom_role', 'Technicien')
                 ->orWhere('nom_role', 'Prestataire Externe')
         )
-            ->where('domaine_id', $incident->domaine_id)
+            ->where('domaine', $incident->domaine_id)
             ->where('disponibilite', true)
             ->orderBy('nom')
             ->get();
