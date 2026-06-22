@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class station extends Model
+class Station extends Model
 {
+    protected $table = 'stations';
+
+    
     protected $fillable = [
         'nom',
         'ville',
@@ -14,13 +16,13 @@ class station extends Model
         'statut',
     ];
 
-    public function equipements(): HasMany
+    public function incidents()
     {
-        return $this->hasMany(Equipement::class);
+        return $this->hasMany(Incident::class, 'station_id');
     }
 
-    public function incidents(): HasMany
+    public function equipements()
     {
-        return $this->hasMany(Incident::class);
+        return $this->hasMany(Equipement::class, 'station_id');
     }
 }

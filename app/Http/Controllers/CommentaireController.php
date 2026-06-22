@@ -23,7 +23,7 @@ class CommentaireController extends Controller
 
         $role = Auth::user()->role->nom_role;
 
-        if (in_array($role, ['Agent Station', 'Sous-gérant de station'])) {
+        if (in_array($role, ['Sous-gérant de station'])) {
             return redirect()->route('incidents.show', $id)
                 ->with('success', 'Mémo envoyé au Directeur Technique.');
         }

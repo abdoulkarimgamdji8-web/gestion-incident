@@ -21,7 +21,7 @@ class StationController extends Controller
      */
     public function create()
     {
-        return view('layouts.stations.ajouter');
+        return view('stations.ajouter');
     }
 
     /**
@@ -60,7 +60,7 @@ class StationController extends Controller
     public function edit(string $id)
     {
         $station = Station::findOrFail($id);
-        return view('layouts.stations.modifier', compact('station'));
+        return view('stations.modifier', compact('station'));
     }
 
     /**
