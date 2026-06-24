@@ -1,13 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-panel">
+
     <div class="content-wrapper">
         <div class="page-header">
             <h3 class="page-title">
-                <span class="page-title-icon bg-gradient-primary text-white me-2">
-                    <i class="mdi mdi-history"></i>
-                </span>
+                
                 Historique de l'incident
             </h3>
         </div>
@@ -21,7 +19,7 @@
 
                         <div class="mb-3">
                             <strong>Statut actuel :</strong>
-                            <span class="badge badge-gradient-primary">{{ ucfirst(str_replace('_', ' ', $incident->statut)) }}</span>
+                            <span class="badge badge-gradient">{{ ucfirst(str_replace('_', ' ', $incident->statut)) }}</span>
                         </div>
 
                         <div class="table-responsive">
@@ -57,5 +55,5 @@
             </div>
         </div>
     </div>
-</div>
+
 @endsection

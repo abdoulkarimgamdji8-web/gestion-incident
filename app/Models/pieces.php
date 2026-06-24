@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pieces extends Model
 {
-    protected $table = 'pieces_jointes';
+    protected $table = 'piece_jointes';
 
     protected $fillable = [
         'nom_fichier',

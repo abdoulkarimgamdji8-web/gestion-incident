@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('statut',['declare', 'assigne', 'en_cours', 'resolu', 'cloture'])->default('declare');
             $table->enum('priorite',['faible', 'eleve', 'critique']);
             $table->timestamp('date_signalement');
-            $table->foreignId('technicien_assigne_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('technicien_assigne_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('station_id')->constrained('stations')->cascadeOnDelete();
             $table->foreignId('equipement_id')->constrained('equipements')->cascadeOnDelete();
             $table->unsignedBigInteger('domaine_id')->nullable()->index();

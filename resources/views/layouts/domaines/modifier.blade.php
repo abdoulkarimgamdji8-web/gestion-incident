@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="main-panel">
+
   <div class="content-wrapper d-flex align-items-center justify-content-center auth" style="min-height:100vh;">
     <div class="col-lg-6 col-md-8 col-sm-12" style="max-width:600px; width:100%;">
 
@@ -35,6 +35,6 @@
         </form>
       </div>
     </div>
-  </div>
-</div>
+  
+
 @endsection

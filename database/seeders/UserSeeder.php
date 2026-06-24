@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         // Plain password shown here intentionally for your records.
         $plainPassword = '12345678';
 
-        $adminRole = Role::firstWhere('nom_role', 'Admin');
+        $adminRole = Role::firstWhere('nom_role', 'Admininstrateur systeme');    
         $technicianRole = Role::firstWhere('nom_role', 'Technicien');
 
         // Create Admin user
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
                 'numero' => '0612345671',
                 'date' => now()->subYears(30),
                 'statut' => 1,
-                'role_id' => $technicianRole->id,
+                'role_id' => 1,
                 'remember_token' => Str::random(10),
             ]
         );

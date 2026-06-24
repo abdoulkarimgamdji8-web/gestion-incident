@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('incidents/{id}/intervenir', [App\Http\Controllers\InterventionController::class, 'intervenir'])->name('incidents.intervenir');
     Route::get('incidents/{id}/rapport', [App\Http\Controllers\InterventionController::class, 'showRapport'])->name('incidents.rapport');
     Route::post('incidents/{id}/rapport', [App\Http\Controllers\InterventionController::class, 'storeRapport'])->name('incidents.rapport.store');
+    Route::post('incidents/{id}/reprendre', [App\Http\Controllers\InterventionController::class, 'reprendre'])->name('incidents.reprendre');
 
     // Incidents DT
     Route::get('incidents/{id}/assigner', [App\Http\Controllers\IncidentController::class, 'showAssignation'])->name('incidents.assignation');

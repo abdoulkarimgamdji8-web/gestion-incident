@@ -1,4 +1,5 @@
 <div class="row p-0 m-0 proBanner" id="proBanner">
+  <!--
   <div class="col-md-12 p-0 m-0">
     <div class="card-body card-body-padding d-flex align-items-center justify-content-between">
       <div class="ps-lg-3">
@@ -15,6 +16,7 @@
       </div>
     </div>
   </div>
+-->
 </div>
 <!-- partial:partials/_navbar.html -->
 <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -43,7 +45,7 @@
       <li class="nav-item nav-profile dropdown">
         <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
           <div class="nav-profile-img">
-            <img src="{{ asset('dist/assets/images/Image.jpeg') }}" alt="image">
+            <img src="{{ asset('dist/assets/images/image.jpeg') }}" alt="image">
             <span class="availability-status online"></span>
           </div>
           <div class="nav-profile-text">
@@ -52,18 +54,17 @@
         </a>
         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
           <a class="dropdown-item" href="#">
-          <!--   <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
-          <div class="dropdown-divider"></div>-->
+           
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{{ route('logout') }}"
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="mdi mdi-logout me-2 text-warning"></i> Signout </a>
+            <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
           <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
           </form>
         </div>
       </li>
       <!--
-
       <li class="nav-item d-none d-lg-block full-screen-link">
         <a class="nav-link">
           <i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
@@ -186,8 +187,7 @@
           <i class="bi bi-list"></i>
         </a>
       </li>
-      <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
-      <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Contact</a></li>
+     
     </ul>
     <!--end::Start Navbar Links-->
     <!--begin::End Navbar Links-->
@@ -203,7 +203,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-bs-toggle="dropdown" href="#">
           <i class="bi bi-chat-text"></i>
-          <span class="navbar-badge badge text-bg-danger">3</span>
+          
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
           <a href="#" class="dropdown-item">
@@ -287,7 +287,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-bs-toggle="dropdown" href="#">
           <i class="bi bi-bell-fill"></i>
-          <span class="navbar-badge badge text-bg-warning">15</span>
+         
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
           <span class="dropdown-item dropdown-header">15 Notifications</span>

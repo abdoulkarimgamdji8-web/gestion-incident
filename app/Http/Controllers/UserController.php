@@ -57,7 +57,7 @@ class UserController extends Controller
         $user->role_id = $validated['role_id'];
 
         if (!empty($validated['domaine_id'])) {
-            $user->domaine_id = $validated['domaine_id'];
+            $user->domaine = $validated['domaine_id'];
         }
 
         $selectedRole = Role::find($validated['role_id']);

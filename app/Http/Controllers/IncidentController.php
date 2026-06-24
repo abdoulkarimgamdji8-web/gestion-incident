@@ -31,33 +31,80 @@ class IncidentController extends Controller
     // Cloturer un incident résolu
     public function cloturer(string $id)
     {
-        $incident = Incident::findOrFail($id);
+        $incident = Incident::with(['commentaires.user.role', 'interventions'])
+            ->findOrFail($id);
 
         if ($incident->statut !== 'resolu') {
-            return redirect()->route('incidents.mes_incidents')
-                ->with('error', 'Seul un incident résolu peut être clôturé.');
+            return back()->with(
+                'error',
+                'Seul un incident résolu peut être clôturé.'
+            );
         }
 
-        // Vérifier que c'est bien le déclarant
-        if ($incident->declarant_id !== Auth::id()) {
-            return redirect()->route('incidents.mes_incidents')
-                ->with('error', 'Seul le déclarant d\'un incident résolu peut le clôturer.');
+        // Vérifier que l'utilisateur connecté est Directeur ou Responsable maintenance
+        $role = Auth::user()->role->nom_role;
+
+        if (!in_array($role, ['Directeur maintenance', 'Responsable maintenance'])) {
+
+            return back()->with(
+                'error',
+                'Vous n\'êtes pas autorisé à clôturer cet incident.'
+            );
+        }
+
+        // Vérifier qu'un mémo du sous-gérant existe après l'intervention
+        $intervention = $incident->interventions->last();
+
+        $memoSousGerant = $incident->commentaires
+            ->filter(function ($commentaire) use ($intervention) {
+
+                return in_array(
+                    $commentaire->user->role->nom_role,
+                    ['Sous-gérant de station']
+                )
+                    && $intervention
+                    && $commentaire->created_at >= $intervention->created_at;
+            })
+            ->count();
+
+        if ($memoSousGerant === 0) {
+
+            return back()->with(
+                'error',
+                'Impossible de clôturer : aucun retour du sous-gérant n\'a encore été reçu.'
+            );
         }
 
         // Libérer le technicien
         if ($incident->technicien_assigne_id) {
-            User::where('id', $incident->technicien_assigne_id)
-                ->update(['disponibilite' => true]);
+
+            User::where(
+                'id',
+                $incident->technicien_assigne_id
+            )->update([
+                'disponibilite' => true
+            ]);
         }
 
-        // Remettre l'équipement en fonctionnel
-        Equipement::where('id', $incident->equipement_id)
-            ->update(['etat' => 'fonctionnel']);
+        // Remettre l'équipement en état fonctionnel
+        Equipement::where(
+            'id',
+            $incident->equipement_id
+        )->update([
+            'etat' => 'fonctionnel'
+        ]);
 
-        $incident->update(['statut' => 'cloture']);
+        // Clôturer l'incident
+        $incident->update([
+            'statut' => 'cloture'
+        ]);
 
-        return redirect()->route('incidents.mes_incidents')
-            ->with('success', 'Incident clôturé avec succès.');
+        return redirect()
+            ->route('incidents.index')
+            ->with(
+                'success',
+                'Incident clôturé avec succès.'
+            );
     }
 
     // Formulaire de déclaration
@@ -81,7 +128,6 @@ class IncidentController extends Controller
     // Enregistrement de la déclaration
     public function store(Request $request)
     {
-        
         $validated = $request->validate([
             'titre'         => 'required|string|max:255',
             'description'   => 'required|string',
@@ -100,34 +146,29 @@ class IncidentController extends Controller
                     }
                 }
             ],
-            'pieces_jointes.*' => '|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
+            'pieces_jointes.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
         ]);
 
         $validated['statut']           = 'declare';
         $validated['date_signalement'] = now();
         $validated['declarant_id']     = Auth::id();
-        
-
 
         $incident = Incident::create($validated);
 
         // Sauvegarder les pièces jointes
-        
-       if ($request->hasFile('pieces_jointes')) {
-    foreach ($request->file('pieces_jointes') as $file) {
-        $chemin = $file->store('pieces_jointes', 'public');
+        if ($request->hasFile('pieces_jointes')) {
+            foreach ($request->file('pieces_jointes') as $file) {
+                $chemin = $file->store('pieces_jointes', 'public');
 
-        $piece = Pieces::create([
-            'nom_fichier'    => $file->getClientOriginalName(),
-            'type_fichier'   => $file->getClientMimeType(),
-            'chemin_fichier' => $chemin,
-            'incident_id'    => $incident->id,
-            'source'         => 'declaration',
-        ]);
-
-        
-    }
-}
+                Pieces::create([
+                    'nom_fichier'    => $file->getClientOriginalName(),
+                    'type_fichier'   => $file->getClientMimeType(),
+                    'chemin_fichier' => $chemin,
+                    'incident_id'    => $incident->id,
+                    'source'         => 'declaration',
+                ]);
+            }
+        }
 
         // Mettre l'équipement en panne
         Equipement::where('id', $validated['equipement_id'])
@@ -193,8 +234,8 @@ class IncidentController extends Controller
             'description'  => 'required|string',
             'priorite'     => 'required|in:faible,eleve,critique',
             'domaine_id'   => 'required|exists:domaines,id',
-            'station_id'   => 'required|exists:stations,id',
-            'equipement_id' => 'required|exists:equipements,id',
+            'station_id'   => 'required|exists:station,id',
+            'equipement_id' => 'required|exists:equipement,id',
         ]);
 
         $incident->update($validated);
@@ -227,7 +268,7 @@ class IncidentController extends Controller
         }
 
         $intervenants = User::whereHas('role', fn($q) => $q->where('nom_role', 'Technicien')->orWhere('nom_role', 'Prestataire Externe'))
-            ->where('domaine_id', $incident->domaine_id)
+            ->where('domaine', $incident->domaine_id)
             ->where('disponibilite', true)
             ->orderBy('nom')
             ->get();
@@ -264,7 +305,7 @@ class IncidentController extends Controller
         $incident    = Incident::with(['domaine', 'station', 'equipement', 'declarant'])->findOrFail($id);
         $historiques = Historique::where('user_id', Auth::id())->orderByDesc('date_action')->get();
 
-        return view('layouts.incidentsDT.historique', compact('incident', 'historiques'));
+        return view(' layouts.incidentsDT.historique', compact('incident', 'historiques'));
     }
 
     // Suppression
@@ -295,8 +336,11 @@ class IncidentController extends Controller
             $q->where('nom_role', 'Technicien')
                 ->orWhere('nom_role', 'Prestataire Externe')
         )
-            ->where('domaine_id', $incident->domaine_id)
-            ->where('disponibilite', true)
+            ->where('domaine', $incident->domaine_id)
+            ->where(function ($q) use ($incident) {
+                $q->where('disponibilite', true)
+                    ->orWhere('id', $incident->technicien_assigne_id);
+            })
             ->orderBy('nom')
             ->get();
 
@@ -307,7 +351,7 @@ class IncidentController extends Controller
     {
         $incident = Incident::findOrFail($id);
 
-        if ($incident->statut !== 'resolu') {
+        if ($incident->statut !== 'non_resolu') {
             return redirect()->route('incidents.index')
                 ->with('error', 'Action non autorisée.');
         }
@@ -334,11 +378,11 @@ class IncidentController extends Controller
         ]);
 
         $incident->update([
-            'statut'                => 'en_cours',
+            'statut'                => 'assigne',
             'technicien_assigne_id' => $request->technicien_assigne_id,
         ]);
 
         return redirect()->route('incidents.index')
-            ->with('success', 'Incident réassigné et remis en cours.');
+            ->with('success', 'Incident réassigné.');
     }
 }

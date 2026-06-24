@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rapport extends Model
 {
-    protected $table = 'rapport';
+    protected $table = 'rapports';
 
     protected $fillable = [
         'contenu',
