@@ -20,6 +20,8 @@
   <!-- endinject -->
   <!-- Layout styles -->
   <link rel="stylesheet" href="{{ asset('dist/assets/css/style.css') }}">
+  <!-- Thème vert custom -->
+  <link rel="stylesheet" href="{{ asset('dist/assets/css/custom.css') }}">
   <!-- End layout styles -->
   <link rel="shortcut icon" href="{{ asset('dist/assets/images/Logo.jpg') }}" />
 </head>

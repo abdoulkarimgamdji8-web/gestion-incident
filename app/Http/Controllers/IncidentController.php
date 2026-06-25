@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Domaine;
 use App\Models\Equipement;
-use App\Models\Historique;
 use App\Models\Incident;
 use App\Models\Station;
 use App\Models\User;
 use App\Models\Pieces;
 use App\Models\Intervention;
+use App\Models\historique;
+use App\Models\notification as NotifModel;
+use App\Notifications\IncidentDeclareNotification;
+use App\Notifications\IncidentAssigneNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,12 +21,25 @@ class IncidentController extends Controller
     // ==================== AGENT ====================
 
     // Liste des incidents de l'agent connecté
-    public function mesIncidents()
+    public function mesIncidents(Request $request)
     {
-        $incidents = Incident::with(['domaine', 'station', 'equipement'])
+        $query = Incident::with(['domaine', 'station', 'equipement'])
             ->where('declarant_id', Auth::id())
-            ->orderByDesc('created_at')
-            ->get();
+            ->orderByDesc('created_at');
+
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(fn($q) => $q->where('titre', 'like', "%{$s}%")
+                                      ->orWhere('description', 'like', "%{$s}%"));
+        }
+        if ($request->filled('statut')) {
+            $query->where('statut', $request->statut);
+        }
+        if ($request->filled('priorite')) {
+            $query->where('priorite', $request->priorite);
+        }
+
+        $incidents = $query->get();
 
         return view('layouts.incidentsAgent.mes_incidents', compact('incidents'));
     }
@@ -99,6 +115,13 @@ class IncidentController extends Controller
             'statut' => 'cloture'
         ]);
 
+        historique::create([
+            'action'      => 'Incident clôturé',
+            'description' => 'Incident "' . $incident->titre . '" clôturé.',
+            'date_action' => now(),
+            'user_id'     => Auth::id(),
+        ]);
+
         return redirect()
             ->route('incidents.index')
             ->with(
@@ -154,6 +177,31 @@ class IncidentController extends Controller
         $validated['declarant_id']     = Auth::id();
 
         $incident = Incident::create($validated);
+
+        // Historique
+        historique::create([
+            'action'      => 'Incident déclaré',
+            'description' => 'Incident "' . $incident->titre . '" déclaré par ' . Auth::user()->prenom . '.',
+            'date_action' => now(),
+            'user_id'     => Auth::id(),
+        ]);
+
+        // Notifications in-app + email aux gestionnaires
+        $managers = User::whereHas('role', fn($q) =>
+            $q->whereIn('nom_role', ['Admin', 'Directeur Technicien', 'Responsable DT'])
+        )->get();
+
+        foreach ($managers as $manager) {
+            NotifModel::create([
+                'message'          => 'Nouvel incident déclaré : ' . $incident->titre,
+                'statut'           => 'non_lue',
+                'date_notification' => now(),
+                'user_id'          => $manager->id,
+            ]);
+            try {
+                $manager->notify(new IncidentDeclareNotification($incident->load('station')));
+            } catch (\Exception $e) {}
+        }
 
         // Sauvegarder les pièces jointes
         if ($request->hasFile('pieces_jointes')) {
@@ -234,8 +282,8 @@ class IncidentController extends Controller
             'description'  => 'required|string',
             'priorite'     => 'required|in:faible,eleve,critique',
             'domaine_id'   => 'required|exists:domaines,id',
-            'station_id'   => 'required|exists:station,id',
-            'equipement_id' => 'required|exists:equipement,id',
+            'station_id'   => 'required|exists:stations,id',
+            'equipement_id' => 'required|exists:equipements,id',
         ]);
 
         $incident->update($validated);
@@ -247,11 +295,24 @@ class IncidentController extends Controller
     // ==================== DIRECTION TECHNIQUE ====================
 
     // Liste de tous les incidents
-    public function index()
+    public function index(Request $request)
     {
-        $incidents = Incident::with(['domaine', 'station', 'equipement', 'declarant', 'technicien'])
-            ->orderByDesc('created_at')
-            ->get();
+        $query = Incident::with(['domaine', 'station', 'equipement', 'declarant', 'technicien'])
+            ->orderByDesc('created_at');
+
+        if ($request->filled('search')) {
+            $s = $request->search;
+            $query->where(fn($q) => $q->where('titre', 'like', "%{$s}%")
+                                      ->orWhere('description', 'like', "%{$s}%"));
+        }
+        if ($request->filled('statut')) {
+            $query->where('statut', $request->statut);
+        }
+        if ($request->filled('priorite')) {
+            $query->where('priorite', $request->priorite);
+        }
+
+        $incidents = $query->get();
 
         return view('layouts.incidentsDT.tous_les_incidents', compact('incidents'));
     }
@@ -268,7 +329,7 @@ class IncidentController extends Controller
         }
 
         $intervenants = User::whereHas('role', fn($q) => $q->where('nom_role', 'Technicien')->orWhere('nom_role', 'Prestataire Externe'))
-            ->where('domaine', $incident->domaine_id)
+            ->where('domaine_id', $incident->domaine_id)
             ->where('disponibilite', true)
             ->orderBy('nom')
             ->get();
@@ -294,6 +355,25 @@ class IncidentController extends Controller
             'technicien_assigne_id' => $validated['technicien_assigne_id'],
             'statut'                => 'assigne',
         ]);
+
+        // Historique
+        historique::create([
+            'action'      => 'Incident assigné',
+            'description' => 'Incident "' . $incident->titre . '" assigné à ' . $technicien->prenom . ' ' . $technicien->nom . '.',
+            'date_action' => now(),
+            'user_id'     => Auth::id(),
+        ]);
+
+        // Notification in-app + email au technicien
+        NotifModel::create([
+            'message'          => 'L\'incident "' . $incident->titre . '" vous a été assigné.',
+            'statut'           => 'non_lue',
+            'date_notification' => now(),
+            'user_id'          => $technicien->id,
+        ]);
+        try {
+            $technicien->notify(new IncidentAssigneNotification($incident->load('station')));
+        } catch (\Exception $e) {}
 
         return redirect()->route('incidents.index')
             ->with('success', 'Incident assigné avec succès.');
@@ -336,7 +416,7 @@ class IncidentController extends Controller
             $q->where('nom_role', 'Technicien')
                 ->orWhere('nom_role', 'Prestataire Externe')
         )
-            ->where('domaine', $incident->domaine_id)
+            ->where('domaine_id', $incident->domaine_id)
             ->where(function ($q) use ($incident) {
                 $q->where('disponibilite', true)
                     ->orWhere('id', $incident->technicien_assigne_id);
@@ -381,6 +461,26 @@ class IncidentController extends Controller
             'statut'                => 'assigne',
             'technicien_assigne_id' => $request->technicien_assigne_id,
         ]);
+
+        $nouveauTech = User::find($request->technicien_assigne_id);
+        historique::create([
+            'action'      => 'Incident réassigné',
+            'description' => 'Incident "' . $incident->titre . '" réassigné à ' . ($nouveauTech?->prenom . ' ' . $nouveauTech?->nom) . '.',
+            'date_action' => now(),
+            'user_id'     => Auth::id(),
+        ]);
+
+        if ($nouveauTech) {
+            NotifModel::create([
+                'message'          => 'L\'incident "' . $incident->titre . '" vous a été réassigné.',
+                'statut'           => 'non_lue',
+                'date_notification' => now(),
+                'user_id'          => $nouveauTech->id,
+            ]);
+            try {
+                $nouveauTech->notify(new IncidentAssigneNotification($incident->load('station')));
+            } catch (\Exception $e) {}
+        }
 
         return redirect()->route('incidents.index')
             ->with('success', 'Incident réassigné.');

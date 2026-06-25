@@ -1,0 +1,286 @@
+/* ================================================================
+   GESTION INCIDENT — THÈME VERT CUSTOM
+   ================================================================ */
+
+:root {
+  --g-primary   : #16a34a;
+  --g-dark      : #15803d;
+  --g-darker    : #14532d;
+  --g-accent    : #86efac;
+  --g-light     : #f0fdf4;
+  --g-sidebar   : #166534;
+  --g-sidebar-hover : rgba(255,255,255,0.12);
+  --g-sidebar-active: rgba(255,255,255,0.20);
+  --radius      : 10px;
+}
+
+/* ---- FOND GÉNÉRAL ---- */
+body { background: #f8fafc !important; }
+
+.main-panel,
+.content-wrapper { background: #f8fafc !important; }
+
+.content-wrapper { padding: 28px !important; }
+
+/* ================================================================
+   SIDEBAR — fond blanc, texte sombre, icônes fond noir foncé
+   ================================================================ */
+.sidebar {
+  background: #ffffff !important;
+  border-right: 1px solid #f1f5f9 !important;
+  box-shadow: none !important;
+  min-height: 100vh;
+}
+
+/* Profil */
+.sidebar .nav .nav-item.nav-profile {
+  background: #f8fafc !important;
+  margin: 0 !important;
+  padding: 14px 16px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+.sidebar .nav .nav-item.nav-profile .nav-link {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+}
+.sidebar .nav-profile-text .font-weight-bold {
+  color: #1e293b !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+}
+.sidebar .nav-profile-text .text-secondary,
+.sidebar .nav-profile-text .text-small {
+  color: var(--g-primary) !important;
+  font-size: 0.72rem !important;
+}
+
+/* Items de nav */
+.sidebar .nav .nav-item { margin: 2px 10px !important; }
+
+.sidebar .nav .nav-item .nav-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 9px 12px !important;
+  border-radius: var(--radius) !important;
+  color: #374151 !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  transition: background 0.18s, color 0.18s !important;
+  margin: 0 !important;
+  white-space: nowrap !important;
+}
+
+.sidebar .nav .nav-item .nav-link:hover {
+  background: var(--g-light) !important;
+  color: var(--g-dark) !important;
+}
+
+.sidebar .nav .nav-item.active > .nav-link,
+.sidebar .nav .nav-item .nav-link.active {
+  background: var(--g-light) !important;
+  color: var(--g-dark) !important;
+  font-weight: 600 !important;
+}
+
+/* ---- Icônes : fond noir foncé, icône blanche ---- */
+.sidebar .nav .nav-item .nav-link i.menu-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  border-radius: 8px !important;
+  background: #1e293b !important;
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  margin: 0 !important;
+}
+
+.sidebar .nav .nav-item .nav-link:hover i.menu-icon,
+.sidebar .nav .nav-item.active > .nav-link i.menu-icon {
+  background: var(--g-primary) !important;
+  color: #fff !important;
+}
+
+.sidebar .nav .nav-item .nav-link .menu-title {
+  color: inherit !important;
+  font-size: inherit !important;
+}
+
+/* Flèche sous-menu */
+.sidebar .nav .nav-item .nav-link .menu-arrow {
+  margin-left: auto !important;
+  color: #9ca3af !important;
+}
+
+/* Sous-menus */
+.sidebar .nav .sub-menu {
+  background: #f8fafc !important;
+  border-radius: var(--radius) !important;
+  margin: 2px 0 4px !important;
+  padding: 4px 0 !important;
+}
+.sidebar .nav .sub-menu .nav-item { margin: 1px 6px !important; }
+.sidebar .nav .sub-menu .nav-item .nav-link {
+  padding: 7px 12px !important;
+  font-size: 0.82rem !important;
+  color: #6b7280 !important;
+  gap: 10px !important;
+}
+.sidebar .nav .sub-menu .nav-item .nav-link i.menu-icon {
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  font-size: 0.85rem !important;
+  background: #334155 !important;
+}
+.sidebar .nav .sub-menu .nav-item .nav-link:hover {
+  background: var(--g-light) !important;
+  color: var(--g-dark) !important;
+}
+.sidebar .nav .sub-menu .nav-item .nav-link:hover i.menu-icon {
+  background: var(--g-primary) !important;
+}
+
+/* ================================================================
+   NAVBAR
+   ================================================================ */
+.navbar.default-layout-navbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e9ecef !important;
+  box-shadow: none !important;
+}
+
+.navbar.default-layout-navbar .navbar-menu-wrapper {
+  background: #ffffff !important;
+}
+
+.navbar .nav-profile-text p { color: #374151 !important; }
+
+/* masquer la 2e navbar (app-header) */
+nav.app-header { display: none !important; }
+
+/* ================================================================
+   CARDS
+   ================================================================ */
+.card {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: var(--radius) !important;
+}
+
+/* Cards simples (fond blanc) */
+.card:not([class*="bg-gradient"]) {
+  background: #fff !important;
+}
+
+/* Cards colorées du dashboard — laisser leur gradient intact */
+.card.bg-gradient-danger,
+.card.bg-gradient-info,
+.card.bg-gradient-success,
+.card.bg-gradient-warning,
+.card.bg-gradient-primary {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: var(--radius) !important;
+}
+
+/* ================================================================
+   TABLES
+   ================================================================ */
+.table { border-collapse: collapse !important; }
+
+.table thead tr { border: none !important; }
+.table thead th {
+  border: none !important;
+  background: var(--g-light) !important;
+  color: var(--g-dark) !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  padding: 10px 16px !important;
+}
+
+.table tbody tr { border-top: 1px solid #f1f5f9 !important; }
+.table tbody td {
+  border: none !important;
+  padding: 11px 16px !important;
+  vertical-align: middle !important;
+  color: #374151 !important;
+  font-size: 0.875rem !important;
+}
+.table tbody tr:hover td { background: var(--g-light) !important; }
+
+/* ================================================================
+   FORMULAIRES
+   ================================================================ */
+.form-control, .form-select {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  font-size: 0.875rem !important;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--g-primary) !important;
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.12) !important;
+}
+.form-label { font-weight: 500 !important; color: #374151 !important; font-size: 0.875rem !important; }
+
+/* ================================================================
+   BOUTONS
+   ================================================================ */
+.btn {
+  border-radius: 8px !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+}
+.btn-primary,
+.btn--icon-text[style*="background: #1e8449"],
+.btn--icon-text[style*="background:#1e8449"] {
+  background: var(--g-primary) !important;
+  border-color: var(--g-primary) !important;
+  color: #fff !important;
+}
+.btn-primary:hover { background: var(--g-dark) !important; border-color: var(--g-dark) !important; }
+
+.btn-outline-primary { color: var(--g-primary) !important; border-color: var(--g-primary) !important; }
+.btn-outline-primary:hover { background: var(--g-primary) !important; color: #fff !important; }
+
+/* ================================================================
+   PAGE HEADER
+   ================================================================ */
+.page-header {
+  margin-bottom: 24px !important;
+  border-bottom: none !important;
+}
+.page-title {
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+}
+.page-title .page-title-icon {
+  background: var(--g-primary) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+/* ================================================================
+   BADGES
+   ================================================================ */
+.badge { font-weight: 500 !important; border-radius: 6px !important; font-size: 0.72rem !important; }
+
+/* ================================================================
+   ALERTES
+   ================================================================ */
+.alert { border: none !important; border-radius: var(--radius) !important; box-shadow: none !important; }
+
+/* ================================================================
+   BREADCRUMB
+   ================================================================ */
+.breadcrumb { background: none !important; padding: 0 !important; }
+.breadcrumb-item.active { color: var(--g-primary) !important; }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Intervention extends Model
 {
-    protected $table = 'intervention';
+    protected $table = 'interventions';
 
     protected $fillable = [
         'date_debut',

@@ -7,6 +7,9 @@ use App\Models\Intervention;
 use App\Models\Rapport;
 use App\Models\Pieces;
 use App\Models\User;
+use App\Models\historique;
+use App\Models\notification as NotifModel;
+use App\Notifications\IncidentResoluNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -48,6 +51,13 @@ class InterventionController extends Controller
         ]);
 
         $incident->update(['statut' => 'en_cours']);
+
+        historique::create([
+            'action'      => 'Intervention démarrée',
+            'description' => 'Intervention démarrée sur l\'incident "' . $incident->titre . '".',
+            'date_action' => now(),
+            'user_id'     => Auth::id(),
+        ]);
 
         return redirect()->route('interventions.mes_interventions')
             ->with('success', 'Intervention démarrée.');
@@ -103,6 +113,13 @@ class InterventionController extends Controller
                 'motif_attente' => $request->motif_attente,
                 'description_attente' => $request->description_attente,
                 'date_reprise_prevue' => $request->date_reprise_prevue,
+            ]);
+
+            historique::create([
+                'action'      => 'Incident mis en attente',
+                'description' => 'Incident "' . $incident->titre . '" mis en attente. Motif : ' . $request->motif_attente,
+                'date_action' => now(),
+                'user_id'     => Auth::id(),
             ]);
 
             return redirect()
@@ -168,6 +185,45 @@ class InterventionController extends Controller
             'description_attente' => null,
             'date_reprise_prevue' => null,
         ]);
+
+        // Historique
+        $actionLabel = $request->resultat_intervention === 'resolu' ? 'Incident résolu' : 'Incident non résolu';
+        historique::create([
+            'action'      => $actionLabel,
+            'description' => 'Rapport soumis pour l\'incident "' . $incident->titre . '".',
+            'date_action' => now(),
+            'user_id'     => Auth::id(),
+        ]);
+
+        // Notifier le déclarant
+        if ($incident->declarant_id) {
+            $statutLabel = $request->resultat_intervention === 'resolu' ? 'résolu' : 'marqué non résolu';
+            NotifModel::create([
+                'message'          => 'L\'incident "' . $incident->titre . '" est ' . $statutLabel . '.',
+                'statut'           => 'non_lue',
+                'date_notification' => now(),
+                'user_id'          => $incident->declarant_id,
+            ]);
+            try {
+                $declarant = User::find($incident->declarant_id);
+                $declarant?->notify(new IncidentResoluNotification($incident, $request->resultat_intervention));
+            } catch (\Exception $e) {}
+        }
+
+        // Si non résolu, notifier les gestionnaires
+        if ($request->resultat_intervention === 'non_resolu') {
+            $managers = User::whereHas('role', fn($q) =>
+                $q->whereIn('nom_role', ['Admin', 'Directeur Technicien', 'Responsable DT'])
+            )->get();
+            foreach ($managers as $manager) {
+                NotifModel::create([
+                    'message'          => 'L\'incident "' . $incident->titre . '" est marqué non résolu.',
+                    'statut'           => 'non_lue',
+                    'date_notification' => now(),
+                    'user_id'          => $manager->id,
+                ]);
+            }
+        }
 
         // Libérer le technicien uniquement si NON RESOLU
         if ($request->resultat_intervention === 'non_resolu') {

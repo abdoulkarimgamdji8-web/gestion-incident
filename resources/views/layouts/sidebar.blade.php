@@ -1,277 +1,146 @@
-<?php
-
-use Illuminate\Support\Facades\Auth;
-
-$user = Auth::user();
-$role = $user->role->nom_role;
-
-?>
+@php
+    use Illuminate\Support\Facades\Auth;
+    $user     = Auth::user();
+    $role     = $user->role->nom_role;
+    $isAdmin  = $role === 'Admin';
+    $isDT     = in_array($role, ['Directeur Technicien', 'Responsable DT']);
+    $isTech   = in_array($role, ['Technicien', 'Prestataire Externe']);
+    $isAgent  = in_array($role, ['Agent Station', 'Sous-gérant de station']);
+    $current  = request()->route()->getName();
+@endphp
 
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
+
+        {{-- Profil utilisateur --}}
         <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                    <img src="{{ asset('dist/assets/images/image.jpeg') }}" alt="profile" />
+                    <img src="{{ asset('dist/assets/images/image.jpeg') }}" alt="profil" />
                     <span class="login-status online"></span>
-                    <!--change to offline or busy as needed-->
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
-                    <span class="font-weight-bold mb-2">{{ Auth::user()->nom }}</span>
-                    <span class="text-secondary text-small">{{ Auth::user()->role->nom_role }}</span>
+                    <span class="font-weight-bold mb-1">{{ $user->prenom }} {{ $user->nom }}</span>
+                    <span class="text-small">{{ $role }}</span>
                 </div>
-                <i
-                    class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
             </a>
         </li>
-        <li class="nav-item">
+
+        {{-- Dashboard (tous les rôles) --}}
+        <li class="nav-item {{ $current === 'dashboard.index' ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('dashboard.index') }}">
-                <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
+                <span class="menu-title">Tableau de bord</span>
             </a>
         </li>
-        @if ($role == 'Administrateur système')
-        <li class="nav-item">
+
+        {{-- ===== ADMIN ===== --}}
+        @if($isAdmin)
+
+        <li class="nav-item {{ str_starts_with($current ?? '', 'users') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('users.index') }}">
-                <span class="menu-title">Gestion des utilisateurs</span>
                 <i class="mdi mdi-account-multiple menu-icon"></i>
+                <span class="menu-title">Utilisateurs</span>
             </a>
         </li>
-         @endif
-        
 
-        @if ($role == 'Directeur maintenance' || $role == 'Responsable maintenance')
-        <li class="nav-item">
+        <li class="nav-item {{ str_starts_with($current ?? '', 'incidents') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('incidents.index') }}">
-                <span class="menu-title">Gestion des incidents</span>
                 <i class="mdi mdi-alert-circle menu-icon"></i>
+                <span class="menu-title">Tous les incidents</span>
             </a>
         </li>
-        @endif
 
-        @if ($role == 'Sous-gérant de station')
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('incidents.mes_incidents') }}">
-                <span class="menu-title">Mes incidents</span>
-                <i class="mdi mdi-alert-circle menu-icon"></i>
-            </a>
-        </li>
-        @endif
-
-        @if ($role == 'Technicien' || $role == 'Prestataire externe')
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('interventions.mes_interventions') }}">
-                <span class="menu-title">Mes interventions</span>
-                <i class="mdi mdi-alert-circle menu-icon"></i>
-            </a>
-        </li>
-        @endif
-        <!--
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#incident-info"
-                aria-expanded="false"
-                aria-controls="incident-info">
-                <span class="menu-title">À propos des incidents</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-information menu-icon"></i>
-            </a>
-            <div class="collapse" id="incident-info">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <div class="text-muted small p-2">
-                            <strong>Incident Technique :</strong><br>
-                            Un problème signalé sur un équipement nécessitant intervention.<br><br>
-                            <strong>Paramètres :</strong><br>
-                            • Domaines : catégories métier<br>
-                            • Stations : lieux d'installation<br>
-                            • Équipements : ressources affectées<br>
-                            • Rôles : permissions utilisateur
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#ui-basic"
-                aria-expanded="false"
-                aria-controls="ui-basic">
-                <span class="menu-title">Basic UI Elements</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-crosshairs-gps menu-icon"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/ui-features/buttons.html">
-                            Buttons
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/ui-features/dropdowns.html">
-                            Dropdowns
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            href="pages/ui-features/typography.html">
-                            Typography
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#icons"
-                aria-expanded="false"
-                aria-controls="icons">
-                <span class="menu-title">Icons</span>
-                <i class="mdi mdi-contacts menu-icon"></i>
-                    <i class="mdi mdi-settings menu-icon"></i>
-            <div class="collapse" id="icons">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/icons/font-awesome.html">
-                            Font Awesome
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#forms"
-                aria-expanded="false"
-                aria-controls="forms">
-                <span class="menu-title">Forms</span>
-                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-            </a>
-            <div class="collapse" id="forms">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/forms/basic_elements.html">
-                            Form Elements
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#charts"
-                aria-expanded="false"
-                aria-controls="charts">
-                <span class="menu-title">Charts</span>
-                <i class="mdi mdi-chart-bar menu-icon"></i>
-            </a>
-            <div class="collapse" id="charts">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/charts/chartjs.html">
-                            ChartJs
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#tables"
-                aria-expanded="false"
-                aria-controls="tables">
-                <span class="menu-title">Tables</span>
-                <i class="mdi mdi-table-large menu-icon"></i>
-            </a>
-            <div class="collapse" id="tables">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/tables/basic-table.html">
-                            Basic table
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
--->
-        @if ($role == 'Administrateur système')
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#auth"
-                aria-expanded="false"
-                aria-controls="auth">
+            <a class="nav-link" data-bs-toggle="collapse" href="#nav-params"
+               aria-expanded="{{ in_array($current, ['roles.index','domaines.index','stations.index','equipements.index']) ? 'true' : 'false' }}">
+                <i class="mdi mdi-cog menu-icon"></i>
                 <span class="menu-title">Paramètres</span>
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-settings menu-icon"></i>
             </a>
-            <div class="collapse" id="auth">
+            <div class="collapse {{ in_array($current, ['roles.index','domaines.index','stations.index','equipements.index']) ? 'show' : '' }}"
+                 id="nav-params">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
+                    <li class="nav-item {{ $current === 'roles.index' ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('roles.index') }}">
-                            Gestion des rôles
+                            <i class="mdi mdi-shield-account menu-icon"></i> Rôles
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ $current === 'domaines.index' ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('domaines.index') }}">
-                            Gestion des domaines
+                            <i class="mdi mdi-tag menu-icon"></i> Domaines
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {{ $current === 'stations.index' ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('stations.index') }}">
-                            Gestion des stations
+                            <i class="mdi mdi-map-marker menu-icon"></i> Stations
                         </a>
                     </li>
-
-                    <li class="nav-item">
+                    <li class="nav-item {{ $current === 'equipements.index' ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('equipements.index') }}">
-                            Gestion des équipements
+                            <i class="mdi mdi-laptop menu-icon"></i> Équipements
                         </a>
                     </li>
-
-                    <!--
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('incidents.index') }}">
-                            Gestion des incidents
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="pages/samples/error-500.html">
-                            500
-                        </a>
-                    </li>
--->
                 </ul>
             </div>
         </li>
+
         @endif
-        <!--
-        <li class="nav-item">
-            <a
-                class="nav-link"
-                href="docs/documentation.html"
-                target="_blank">
-                <span class="menu-title">Documentation</span>
-                <i class="mdi mdi-file-document-box menu-icon"></i>
+
+        {{-- ===== DIRECTION TECHNIQUE ===== --}}
+        @if($isDT)
+
+        <li class="nav-item {{ str_starts_with($current ?? '', 'incidents') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('incidents.index') }}">
+                <i class="mdi mdi-alert-circle menu-icon"></i>
+                <span class="menu-title">Gestion des incidents</span>
             </a>
         </li>
--->
+
+        @endif
+
+        {{-- ===== TECHNICIEN / PRESTATAIRE ===== --}}
+        @if($isTech)
+
+        <li class="nav-item {{ $current === 'interventions.mes_interventions' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('interventions.mes_interventions') }}">
+                <i class="mdi mdi-wrench menu-icon"></i>
+                <span class="menu-title">Mes interventions</span>
+            </a>
+        </li>
+
+        @endif
+
+        {{-- ===== AGENT STATION / SOUS-GÉRANT ===== --}}
+        @if($isAgent)
+
+        <li class="nav-item {{ $current === 'incidents.create' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('incidents.create') }}">
+                <i class="mdi mdi-plus-circle menu-icon"></i>
+                <span class="menu-title">Déclarer un incident</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ $current === 'incidents.mes_incidents' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('incidents.mes_incidents') }}">
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                <span class="menu-title">Mes incidents</span>
+            </a>
+        </li>
+
+        @endif
+
+        {{-- Déconnexion --}}
+        <li class="nav-item mt-auto" style="margin-top: 24px !important;">
+            <a class="nav-link" href="{{ route('logout') }}"
+               onclick="event.preventDefault(); document.getElementById('logout-form-sidebar').submit();">
+                <i class="mdi mdi-logout menu-icon"></i>
+                <span class="menu-title">Déconnexion</span>
+            </a>
+            <form id="logout-form-sidebar" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+        </li>
+
     </ul>
 </nav>

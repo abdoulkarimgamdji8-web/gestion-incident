@@ -28,6 +28,43 @@
                     </div>
                     @endif
 
+                    {{-- Filtres --}}
+                    <form method="GET" action="{{ route('incidents.index') }}" class="row g-2 mb-3">
+                        <div class="col-md-4">
+                            <input type="text" name="search" class="form-control form-control-sm"
+                                placeholder="Rechercher (titre, description)..."
+                                value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-3">
+                            <select name="statut" class="form-select form-select-sm">
+                                <option value="">Tous les statuts</option>
+                                @foreach(['declare'=>'Déclaré','assigne'=>'Assigné','en_cours'=>'En cours','en_attente'=>'En attente','resolu'=>'Résolu','non_resolu'=>'Non résolu','cloture'=>'Clôturé'] as $val => $label)
+                                    <option value="{{ $val }}" {{ request('statut') === $val ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select name="priorite" class="form-select form-select-sm">
+                                <option value="">Toutes priorités</option>
+                                <option value="faible"   {{ request('priorite') === 'faible'   ? 'selected' : '' }}>Faible</option>
+                                <option value="eleve"    {{ request('priorite') === 'eleve'    ? 'selected' : '' }}>Élevé</option>
+                                <option value="critique" {{ request('priorite') === 'critique' ? 'selected' : '' }}>Critique</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-sm btn-primary w-100" type="submit">
+                                <i class="mdi mdi-magnify"></i> Filtrer
+                            </button>
+                        </div>
+                        @if(request()->hasAny(['search','statut','priorite']))
+                        <div class="col-md-1">
+                            <a href="{{ route('incidents.index') }}" class="btn btn-sm btn-outline-secondary w-100">
+                                <i class="mdi mdi-close"></i>
+                            </a>
+                        </div>
+                        @endif
+                    </form>
+
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>

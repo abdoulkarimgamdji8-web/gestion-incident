@@ -20,5 +20,6 @@ class RoleSeeder extends Seeder
         Role::updateOrCreate(['nom_role' => 'Technicien']);
         Role::updateOrCreate(['nom_role' => 'Prestataire Externe']);
         Role::updateOrCreate(['nom_role' => 'Agent Station']);
+        Role::updateOrCreate(['nom_role' => 'Sous-gérant de station']);
     }
 }

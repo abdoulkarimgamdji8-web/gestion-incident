@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Incident extends Model
 {
-    protected $table = 'incident';
+    protected $table = 'incidents';
 
     protected $fillable = [
         'titre',
