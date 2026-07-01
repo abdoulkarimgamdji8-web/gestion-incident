@@ -13,11 +13,14 @@ class DomaineSeeder extends Seeder
      */
     public function run(): void
     {
-        Domaine::updateOrCreate(['nom_domaine' => 'Réseau']);
-        Domaine::updateOrCreate(['nom_domaine' => 'Sécurité']);
-        Domaine::updateOrCreate(['nom_domaine' => 'Maintenance']);
-        Domaine::updateOrCreate(['nom_domaine' => 'Support']);
-        Domaine::updateOrCreate(['nom_domaine' => 'Infrastructure']);
-        Domaine::updateOrCreate(['nom_domaine' => 'Logiciels']);
+        // Domaines techniques spécifiques aux stations-services
+        Domaine::updateOrCreate(['nom_domaine' => 'Volucompteurs & Pompes']);
+        Domaine::updateOrCreate(['nom_domaine' => 'Cuves & Stockage Carburant']);
+        Domaine::updateOrCreate(['nom_domaine' => 'Électricité & Énergie (Groupes Élec)']);
+        Domaine::updateOrCreate(['nom_domaine' => 'Plomberie & Tuyauterie Haute Pression']);
+        Domaine::updateOrCreate(['nom_domaine' => 'Sécurité Incendie & Environnement']);
+        Domaine::updateOrCreate(['nom_domaine' => 'Génie Civil & Infrastructures']);
+        Domaine::updateOrCreate(['nom_domaine' => 'Systèmes de Paiement & TPE']);
+        Domaine::updateOrCreate(['nom_domaine' => 'Vidéosurveillance & Sécurité Électronique']);
     }
-} 
+}

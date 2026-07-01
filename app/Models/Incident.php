@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Incident extends Model
 {
-    protected $table = 'incidents';
+    protected $table = 'incident';
 
     protected $fillable = [
         'titre',
@@ -71,5 +71,9 @@ class Incident extends Model
     public function commentaires()
     {
         return $this->hasMany(Commentaire::class)->orderBy('created_at', 'asc');
+    }
+    public function historiques()
+    {
+        return $this->hasMany(Historique::class)->orderByDesc('created_at');
     }
 }

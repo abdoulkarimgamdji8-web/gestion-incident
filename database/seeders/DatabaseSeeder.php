@@ -22,6 +22,11 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             DomaineSeeder::class,
             UserSeeder::class,
+            StationSeeder::class,
+            EquipementSeeder::class,
+            IncidentSeeder::class,
+
         ]);
+
     }
 }

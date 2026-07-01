@@ -23,7 +23,8 @@ class InterventionController extends Controller
             ->where('technicien_assigne_id', Auth::id())
             ->whereIn('statut', ['assigne', 'en_cours', 'en_attente', 'resolu', 'non_resolu', 'cloture'])
             ->orderByDesc('updated_at')
-            ->get();
+            ->paginate(10);
+            
 
         return view('layouts.interventions.mes_interventions', compact('interventions'));
     }
@@ -115,6 +116,18 @@ class InterventionController extends Controller
                 'date_reprise_prevue' => $request->date_reprise_prevue,
             ]);
 
+            // Notifier le DT et Responsable maintenance
+$destinataires = User::whereHas('role', fn($q) =>
+    $q->where('nom_role', 'Directeur maintenance')
+      ->orWhere('nom_role', 'Responsable maintenance')
+)->get();
+
+foreach ($destinataires as $destinataire) {
+    $destinataire->notify(new RapportSoumisNotification(
+        $incident->load(['station', 'equipement', 'technicien']),
+        $request->resultat_intervention
+    ));
+}
             historique::create([
                 'action'      => 'Incident mis en attente',
                 'description' => 'Incident "' . $incident->titre . '" mis en attente. Motif : ' . $request->motif_attente,

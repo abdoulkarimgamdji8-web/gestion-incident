@@ -139,7 +139,7 @@
                                         </a>
                                         @endif
 
-                                        <a href="{{ route('incidents.historique', $incident->id) }}"
+                                        <a href="{{ route('incidents.historiques', $incident->id) }}"
                                             class="btn btn-sm btn-outline-secondary mb-1" title="Historique">
                                             <i class="mdi mdi-history"></i>
                                         </a>
@@ -152,6 +152,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                        <div class="mt-3">
+                            {{ $incidents->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

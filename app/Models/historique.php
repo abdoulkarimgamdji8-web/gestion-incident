@@ -3,14 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class historique extends Model
+class Historique extends Model
 {
-    protected $fillable = ['action', 'description', 'date_action', 'user_id'];
+    protected $table = 'historique';
+    protected $fillable = [
+        'action',
+        'description',
+        'date_action',
+        'user_id',
+        'incident_id',
+    ];
 
-    public function user(): BelongsTo
+    protected $casts = [
+        'date_action' => 'datetime',
+    ];
+
+    public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function incident()
+    {
+        return $this->belongsTo(Incident::class);
     }
 }

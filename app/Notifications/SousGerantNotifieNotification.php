@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class IncidentAssigneNotification extends Notification
+class SousGerantNotifieNotification extends Notification
 {
     use Queueable;
 
@@ -21,15 +21,15 @@ class IncidentAssigneNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Incident assigné — INC-' . str_pad($this->incident->id, 6, '0', STR_PAD_LEFT))
+            ->subject('Vérification terrain requise — INC-' . str_pad($this->incident->id, 6, '0', STR_PAD_LEFT))
             ->greeting('Bonjour ' . $notifiable->prenom . ',')
-            ->line('Un incident vous a été assigné et nécessite votre intervention.')
+            ->line('L\'intervention sur votre incident est terminée. Merci de vérifier sur le terrain.')
             ->line('**Titre :** ' . $this->incident->titre)
             ->line('**Station :** ' . optional($this->incident->station)->nom)
             ->line('**Équipement :** ' . optional($this->incident->equipement)->nom)
-            ->line('**Priorité :** ' . ucfirst($this->incident->priorite))
-            ->line('**Description :** ' . $this->incident->description)
+            ->line('**Intervenant :** ' . optional($this->incident->technicien)->prenom . ' ' . optional($this->incident->technicien)->nom)
             ->action('Voir l\'incident', url('/incidents/' . $this->incident->id))
-            ->line('Merci de prendre en charge cet incident dans les meilleurs délais.');
+            ->line('Si tout est en ordre, vous pouvez signaler au Directeur Maintenance pour clôturer l\'incident.')
+            ->line('Dans le cas contraire, laissez un mémo au Directeur Maintenance.');
     }
 }

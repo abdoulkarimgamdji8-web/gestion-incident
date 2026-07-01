@@ -21,28 +21,34 @@ class IncidentController extends Controller
     // ==================== AGENT ====================
 
     // Liste des incidents de l'agent connecté
-    public function mesIncidents(Request $request)
-    {
-        $query = Incident::with(['domaine', 'station', 'equipement'])
-            ->where('declarant_id', Auth::id())
-            ->orderByDesc('created_at');
+   public function mesIncidents(Request $request)
+{
+    // 1. Start the query builder (No spaces, no semicolon here)
+    $query = Incident::with(['domaine', 'station', 'equipement'])
+        ->where('declarant_id', Auth::id())
+        ->orderByDesc('created_at');
 
-        if ($request->filled('search')) {
-            $s = $request->search;
-            $query->where(fn($q) => $q->where('titre', 'like', "%{$s}%")
-                                      ->orWhere('description', 'like', "%{$s}%"));
-        }
-        if ($request->filled('statut')) {
-            $query->where('statut', $request->statut);
-        }
-        if ($request->filled('priorite')) {
-            $query->where('priorite', $request->priorite);
-        }
-
-        $incidents = $query->get();
-
-        return view('layouts.incidentsAgent.mes_incidents', compact('incidents'));
+    // 2. Apply dynamic filters
+    if ($request->filled('search')) {
+        $s = $request->search;
+        $query->where(fn($q) => $q->where('titre', 'like', "%{$s}%")
+                                  ->orWhere('description', 'like', "%{$s}%"));
     }
+
+    if ($request->filled('statut')) {
+        $query->where('statut', $request->statut);
+    }
+
+    if ($request->filled('priorite')) {
+        $query->where('priorite', $request->priorite);
+    }
+
+    // 3. Execute the query at the very end using paginate
+    $incidents = $query->paginate(10);
+
+    return view('layouts.incidentsAgent.mes_incidents', compact('incidents'));
+}
+
 
     // Cloturer un incident résolu
     public function cloturer(string $id)
@@ -114,6 +120,10 @@ class IncidentController extends Controller
         $incident->update([
             'statut' => 'cloture'
         ]);
+        // Notifier le sous-gérant déclarant
+if ($incident->declarant) {
+    $incident->declarant->notify(new IncidentClotureNotification($incident->load(['station', 'equipement'])));
+}
 
         historique::create([
             'action'      => 'Incident clôturé',
@@ -295,24 +305,11 @@ class IncidentController extends Controller
     // ==================== DIRECTION TECHNIQUE ====================
 
     // Liste de tous les incidents
-    public function index(Request $request)
+   public function index()
     {
-        $query = Incident::with(['domaine', 'station', 'equipement', 'declarant', 'technicien'])
-            ->orderByDesc('created_at');
-
-        if ($request->filled('search')) {
-            $s = $request->search;
-            $query->where(fn($q) => $q->where('titre', 'like', "%{$s}%")
-                                      ->orWhere('description', 'like', "%{$s}%"));
-        }
-        if ($request->filled('statut')) {
-            $query->where('statut', $request->statut);
-        }
-        if ($request->filled('priorite')) {
-            $query->where('priorite', $request->priorite);
-        }
-
-        $incidents = $query->get();
+        $incidents = Incident::with(['domaine', 'station', 'equipement', 'declarant', 'technicien'])
+            ->orderByDesc('created_at')
+            ->paginate(10);
 
         return view('layouts.incidentsDT.tous_les_incidents', compact('incidents'));
     }
@@ -356,6 +353,12 @@ class IncidentController extends Controller
             'statut'                => 'assigne',
         ]);
 
+          // Notifier le nouveau technicien
+$nouveauTech->notify(new IncidentReassigneNotification($incident->load(['station', 'equipement'])));
+
+       // Notifier le technicien
+        $technicien->notify(new IncidentAssigneNotification($incident->load(['station', 'equipement'])));
+        
         // Historique
         historique::create([
             'action'      => 'Incident assigné',
@@ -380,7 +383,7 @@ class IncidentController extends Controller
     }
 
     // Historique
-    public function historique(string $id)
+    public function historiques(string $id)
     {
         $incident    = Incident::with(['domaine', 'station', 'equipement', 'declarant'])->findOrFail($id);
         $historiques = Historique::where('user_id', Auth::id())->orderByDesc('date_action')->get();
@@ -484,5 +487,20 @@ class IncidentController extends Controller
 
         return redirect()->route('incidents.index')
             ->with('success', 'Incident réassigné.');
+    }
+
+    // Historique d'un incident (DT)
+    public function historique(string $id)
+    {
+        $incident = Incident::with([
+            'domaine',
+            'station',
+            'equipement',
+            'declarant',
+            'technicien',
+            'historiques.user'
+        ])->findOrFail($id);
+
+        return view('incidentsDT.historiques', compact('incident'));
     }
 }

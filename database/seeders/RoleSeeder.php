@@ -14,12 +14,11 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         
-        Role::updateOrCreate(['nom_role' => 'Admin']);
-        Role::updateOrCreate(['nom_role' => 'Directeur Technicien']);
-        Role::updateOrCreate(['nom_role' => 'Responsable DT']);
+        Role::updateOrCreate(['nom_role' => 'Administrateur système']);
+        Role::updateOrCreate(['nom_role' => 'Directeur maintenance']);
+        Role::updateOrCreate(['nom_role' => 'Responsable maintenance']);
         Role::updateOrCreate(['nom_role' => 'Technicien']);
         Role::updateOrCreate(['nom_role' => 'Prestataire Externe']);
-        Role::updateOrCreate(['nom_role' => 'Agent Station']);
         Role::updateOrCreate(['nom_role' => 'Sous-gérant de station']);
     }
 }

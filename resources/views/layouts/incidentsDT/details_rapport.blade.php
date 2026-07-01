@@ -143,9 +143,7 @@
             @endphp
 
             <div class="card mb-4">
-
                 @if($incident->statut === 'en_attente')
-
                 <div class="card border-warning mt-3">
                     <div class="card-body">
 
@@ -173,7 +171,6 @@
 
                     </div>
                 </div>
-
                 @else
 
                 <div class="card-body">
@@ -265,17 +262,19 @@
             </div>
             @endif
 
-            {{-- Notifier sous-gérant : DT si statut résolu --}}
-            @if ($incident->statut === 'resolu' && in_array($role, ['Responsable maintenance', 'Directeur maintenance']))
             @php
+            $memoSousGerant = 0;
+            if ($intervention) {
             $memoSousGerant = $incident->commentaires->filter(function($c) use ($intervention) {
             return in_array($c->user->role->nom_role, ['Sous-gérant de station'])
-            && $intervention
             && $c->created_at >= $intervention->created_at;
             })->count();
+            }
+
+            $memoSousGerantExiste = $memoSousGerant > 0;
             @endphp
 
-            @if ($memoSousGerant === 0)
+            @if($incident->statut === 'resolu' && in_array($role, ['Directeur maintenance', 'Responsable maintenance']) && $memoSousGerant === 0)
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="card-title">
@@ -290,7 +289,7 @@
                         action="{{ route('incidents.commentaire.store', $incident->id) }}">
                         @csrf
                         <input type="hidden" name="contenu"
-                            value="L'intervention sur votre incident est terminée. Merci de vérifier sur le terrain .">
+                            value="L'intervention sur votre incident est terminée. Merci de vérifier sur le terrain et dire au directeur maintenance si tout est en ordre.">
                         <button type="submit" class="btn btn-gradient-warning btn-lg"
                             onclick="return confirm('Notifier le sous-gérant ?')">
                             <i class="mdi mdi-bell-ring"></i> Notifier le sous-gérant
@@ -298,7 +297,6 @@
                     </form>
                 </div>
             </div>
-            @endif
             @endif
 
             {{-- Mémos / Commentaires --}}
@@ -347,8 +345,7 @@
             {{-- Formulaire de rapport : DT si statut assigné ou en cours --}}
 
             {{-- Réassigner : DT si statut non_resolu --}}
-            @if ($incident->statut === 'non_resolu' &&
-            in_array($role, ['Responsable Maintenance', 'Directeur maintenance']))
+            @if ($incident->statut === 'non_resolu' && ($role === 'Directeur maintenance' || $role === 'Responsable maintenance'))
             <div class="card mb-4">
                 <div class="card-body">
                     <h4 class="card-title text-danger">
@@ -404,7 +401,7 @@
                 &&
                 $memoSousGerant > 0
                 &&
-                in_array($role, ['Directeur maintenance'])
+                ($role === 'Directeur maintenance' || $role === 'Responsable maintenance'))
                 )
 
                 <form method="POST"
@@ -420,7 +417,6 @@
 
                     </button>
                 </form>
-
                 @endif
             </div>
 
